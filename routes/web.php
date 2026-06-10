@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JadwalDokterController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,6 +41,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pasien/dashboard', function () {
         return view('pasien.dashboard');
     })->name('pasien.dashboard');
+
+    // Rute CRUD Jadwal Dokter (Hanya bisa diakses yang sudah login)
+    Route::resource('jadwal', JadwalDokterController::class);
 
 });
 
