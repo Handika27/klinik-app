@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\JadwalDokter;
+use App\Models\User;
 
 class JadwalDokterController extends Controller
 {
@@ -12,10 +13,11 @@ class JadwalDokterController extends Controller
      */
     public function index()
     {
-        // Nantinya kita akan mengambil data dari database di sini
-        // Untuk sekarang, kita arahkan dulu ke halaman antarmukanya
+        // Mengambil semua data dari tabel jadwal_dokters
+        $jadwals = JadwalDokter::all();
         
-        return view('jadwal.index');
+        // Mengirim variabel $jadwals ke halaman view
+        return view('jadwal.index', compact('jadwals'));
     }
 
     /**
@@ -31,22 +33,23 @@ class JadwalDokterController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi inputan (pastikan tidak ada yang kosong)
+        // Validasi input
         $request->validate([
+            'nama_dokter' => 'required|string',
             'hari' => 'required|string',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
         ]);
 
-        // 2. Simpan data ke tabel jadwal_dokters
+        // Simpan data
         JadwalDokter::create([
-            'user_id' => auth()->user()->id, // Otomatis mengisi ID dokter yang sedang login
+            'user_id' => auth()->user()->id, // Menyimpan ID admin yang menginput data
+            'nama_dokter' => $request->nama_dokter, // <--- Tangkap hasil ketikan manual
             'hari' => $request->hari,
             'jam_mulai' => $request->jam_mulai,
             'jam_selesai' => $request->jam_selesai,
         ]);
 
-        // 3. Kembalikan ke halaman tabel (index)
         return redirect()->route('jadwal.index');
     }
 

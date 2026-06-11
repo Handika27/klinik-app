@@ -27,11 +27,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="border-b p-3 text-center text-gray-500" colspan="5">
-                                    Belum ada data jadwal dokter.
-                                </td>
-                            </tr>
+                            @forelse ($jadwals as $index => $jadwal)
+                                <tr class="border-b hover:bg-slate-50 transition-colors">
+                                    <td class="p-4 text-slate-600">{{ $index + 1 }}</td>
+                                    <td class="p-4 font-medium text-slate-900">{{ $jadwal->nama_dokter }}</td>
+                                    <td class="p-4 text-slate-600">
+                                        <span class="bg-indigo-100 text-indigo-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                            {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}
+                                        </span>
+                                    </td>
+                                    <td class="p-4 flex gap-2">
+                                        <button class="text-emerald-600 hover:text-emerald-800 font-medium text-sm">Edit</button>
+                                        <button class="text-red-600 hover:text-red-800 font-medium text-sm">Hapus</button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td class="border-b p-6 text-center text-slate-500" colspan="5">
+                                        Belum ada data jadwal dokter. Silakan tambah jadwal baru.
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

@@ -9,11 +9,17 @@ class JadwalDokter extends Model
 {
     use HasFactory;
 
-    // Memberitahu Laravel kolom mana yang boleh diisi dari form
     protected $fillable = [
         'user_id',
+        'nama_dokter',
         'hari',
         'jam_mulai',
         'jam_selesai',
     ];
+
+    // Membuat jembatan relasi ke tabel User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

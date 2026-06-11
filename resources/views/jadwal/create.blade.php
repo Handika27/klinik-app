@@ -11,11 +11,16 @@
                 <div class="p-6 text-gray-900">
                     
                     <form action="{{ route('jadwal.store') }}" method="POST">
-                        @csrf
-                        
-                        <div class="mb-4">
-                            <label for="hari" class="block text-gray-700 font-bold mb-2">Hari Praktik</label>
-                            <select name="hari" id="hari" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+    @csrf
+
+    <div class="mb-4">
+        <label for="nama_dokter" class="block text-sm font-medium text-slate-700 mb-1">Nama Dokter</label>
+        <input type="text" name="nama_dokter" id="nama_dokter" class="w-full border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required placeholder="Contoh: Dr. Handika">
+    </div>
+
+    <div class="mb-4">
+        <label for="hari" class="block text-gray-700 font-bold mb-2">Hari Praktik</label>
+        <select name="hari" id="hari" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
                                 <option value="">-- Pilih Hari --</option>
                                 <option value="Senin">Senin</option>
                                 <option value="Selasa">Selasa</option>
