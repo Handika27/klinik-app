@@ -41,16 +41,23 @@ class JadwalDokterController extends Controller
             'jam_selesai' => 'required',
         ]);
 
-        // Simpan data
-        JadwalDokter::create([
-            'user_id' => auth()->user()->id, // Menyimpan ID admin yang menginput data
-            'nama_dokter' => $request->nama_dokter, // <--- Tangkap hasil ketikan manual
-            'hari' => $request->hari,
-            'jam_mulai' => $request->jam_mulai,
-            'jam_selesai' => $request->jam_selesai,
-        ]);
+        try {
+            // Proses Simpan Data
+            JadwalDokter::create([
+                'user_id' => auth()->user()->id, 
+                'nama_dokter' => $request->nama_dokter, 
+                'hari' => $request->hari,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+            ]);
 
-        return redirect()->route('jadwal.index');
+            // Jika sukses, kembalikan ke halaman tabel BERSAMA pesan sukses
+            return redirect()->route('jadwal.index')->with('success', 'Jadwal dokter berhasil ditambahkan!');
+
+        } catch (\Exception $e) {
+            // Jika gagal, kembalikan ke halaman sebelumnya BERSAMA pesan error
+            return redirect()->back()->with('error', 'Gagal menyimpan data: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -64,9 +71,16 @@ class JadwalDokterController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit(string $id)
     {
-        //
+        // Cari data berdasarkan ID
+        $jadwal = JadwalDokter::findOrFail($id);
+        
+        // Buka halaman form edit sambil membawa data lama
+        return view('jadwal.edit', compact('jadwal'));
     }
 
     /**
@@ -74,14 +88,52 @@ class JadwalDokterController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-    }
+        // 1. Validasi inputan baru
+        $request->validate([
+            'nama_dokter' => 'required|string',
+            'hari' => 'required|string',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required',
+        ]);
 
+        try {
+            // 2. Cari data lama yang mau diubah
+            $jadwal = JadwalDokter::findOrFail($id);
+            
+            // 3. Timpa dengan data baru
+            $jadwal->update([
+                'nama_dokter' => $request->nama_dokter,
+                'hari' => $request->hari,
+                'jam_mulai' => $request->jam_mulai,
+                'jam_selesai' => $request->jam_selesai,
+            ]);
+
+            // 4. Kembalikan ke tabel dengan pesan sukses
+            return redirect()->route('jadwal.index')->with('success', 'Jadwal dokter berhasil diperbarui!');
+
+        } catch (\Exception $e) {
+            // Jika error, kembalikan dengan pesan gagal
+            return redirect()->back()->with('error', 'Gagal memperbarui data: ' . $e->getMessage());
+        }
+    }
     /**
-     * Remove the specified resource from storage.
+     * Update the specified resource in storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        try {
+            // Cari data berdasarkan ID
+            $jadwal = JadwalDokter::findOrFail($id);
+            
+            // Hapus data
+            $jadwal->delete();
+
+            // Kembalikan ke tabel dengan pesan sukses
+            return redirect()->route('jadwal.index')->with('success', 'Data jadwal berhasil dihapus!');
+
+        } catch (\Exception $e) {
+            // Jika gagal, tampilkan pesan error
+            return redirect()->back()->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
     }
 }
