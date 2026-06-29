@@ -46,7 +46,7 @@
                                         <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : ($r->status == 'dikonfirmasi' ? 'bg-emerald-100 text-emerald-800' : ($r->status == 'selesai' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800')) }}">{{ ucfirst($r->status) }}</span>
                                     </td>
                                     <td class="p-4">
-                                        <form action="{{ route('admin.reservasi.updateStatus', $r->id) }}" method="POST" class="inline-block">
+                                        <form action="{{ auth()->user()->role === 'admin' ? route('admin.reservasi.updateStatus', $r->id) : route('dokter.reservasi.updateStatus', $r->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             <select name="status" class="border-gray-300 rounded-md mr-2">
                                                 <option value="pending" {{ $r->status=='pending' ? 'selected' : '' }}>Pending</option>

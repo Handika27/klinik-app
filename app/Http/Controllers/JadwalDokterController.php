@@ -25,7 +25,9 @@ class JadwalDokterController extends Controller
      */
     public function create()
     {
-        return view('jadwal.create');
+        // Ambil daftar user dengan role dokter
+        $doctors = User::where('role', 'dokter')->get();
+        return view('jadwal.create', compact('doctors'));
     }
 
     /**
@@ -35,7 +37,7 @@ class JadwalDokterController extends Controller
     {
         // Validasi input
         $request->validate([
-            'nama_dokter' => 'required|string',
+            'dokter_id' => 'required|exists:users,id',
             'hari' => 'required|string',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
@@ -43,9 +45,10 @@ class JadwalDokterController extends Controller
 
         try {
             // Proses Simpan Data
+            $doctor = User::findOrFail($request->dokter_id);
             JadwalDokter::create([
-                'user_id' => auth()->user()->id, 
-                'nama_dokter' => $request->nama_dokter, 
+                'user_id' => $doctor->id,
+                'nama_dokter' => $doctor->name,
                 'hari' => $request->hari,
                 'jam_mulai' => $request->jam_mulai,
                 'jam_selesai' => $request->jam_selesai,
@@ -78,9 +81,10 @@ class JadwalDokterController extends Controller
     {
         // Cari data berdasarkan ID
         $jadwal = JadwalDokter::findOrFail($id);
-        
+        // Ambil daftar dokter untuk select
+        $doctors = User::where('role', 'dokter')->get();
         // Buka halaman form edit sambil membawa data lama
-        return view('jadwal.edit', compact('jadwal'));
+        return view('jadwal.edit', compact('jadwal', 'doctors'));
     }
 
     /**
@@ -90,7 +94,7 @@ class JadwalDokterController extends Controller
     {
         // 1. Validasi inputan baru
         $request->validate([
-            'nama_dokter' => 'required|string',
+            'dokter_id' => 'required|exists:users,id',
             'hari' => 'required|string',
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
@@ -101,8 +105,10 @@ class JadwalDokterController extends Controller
             $jadwal = JadwalDokter::findOrFail($id);
             
             // 3. Timpa dengan data baru
+            $doctor = User::findOrFail($request->dokter_id);
             $jadwal->update([
-                'nama_dokter' => $request->nama_dokter,
+                'user_id' => $doctor->id,
+                'nama_dokter' => $doctor->name,
                 'hari' => $request->hari,
                 'jam_mulai' => $request->jam_mulai,
                 'jam_selesai' => $request->jam_selesai,
@@ -134,6 +140,28 @@ class JadwalDokterController extends Controller
         } catch (\Exception $e) {
             // Jika gagal, tampilkan pesan error
             return redirect()->back()->with('error', 'Gagal menghapus data: ' . $e->getMessage());
+        }
+    }
+
+    // Sinkronisasi jadwal: hubungkan jadwal yang nama_dokter-nya match dengan akun user dokter
+    public function syncUsers()
+    {
+        try {
+            $updated = 0;
+            $jadwals = JadwalDokter::whereNull('user_id')->orWhere('user_id', 0)->get();
+
+            foreach ($jadwals as $jadwal) {
+                $user = User::where('role', 'dokter')->where('name', $jadwal->nama_dokter)->first();
+                if ($user) {
+                    $jadwal->user_id = $user->id;
+                    $jadwal->save();
+                    $updated++;
+                }
+            }
+
+            return redirect()->route('jadwal.index')->with('success', "Sinkronisasi selesai. Jumlah jadwal terhubung: $updated");
+        } catch (\Exception $e) {
+            return redirect()->route('jadwal.index')->with('error', 'Gagal melakukan sinkronisasi: ' . $e->getMessage());
         }
     }
 }

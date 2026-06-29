@@ -76,10 +76,30 @@ class ReservasiController extends Controller
         return view('pasien.reservasi.index', compact('reservasis'));
     }
 
+    // Halaman untuk dokter mengelola reservasi terkait jadwal miliknya
+    public function dokterIndex()
+    {
+        abort_if(auth()->user()->role !== 'dokter', 403);
+
+        $dokterId = auth()->user()->id;
+        $jadwalIds = \App\Models\JadwalDokter::where('user_id', $dokterId)->pluck('id')->toArray();
+
+        $reservasis = Reservasi::with(['pasien', 'jadwal'])
+            ->whereIn('jadwal_id', $jadwalIds)
+            ->orderBy('tanggal_kunjungan', 'desc')
+            ->get();
+
+        return view('admin.reservasi.index', compact('reservasis'));
+    }
+
     // Ubah status reservasi (misal setujui atau tolak)
     public function updateStatus(Request $request, $id)
     {
-        abort_if(auth()->user()->role !== 'admin', 403);
+        // Allow admin or dokter (dokter hanya untuk reservasi terkait jadwal miliknya)
+        $user = auth()->user();
+        if (!in_array($user->role, ['admin', 'dokter'])) {
+            abort(403);
+        }
 
         $request->validate([
             'status' => 'required|in:pending,dikonfirmasi,selesai,batal',
@@ -87,11 +107,28 @@ class ReservasiController extends Controller
 
         try {
             $reservasi = Reservasi::findOrFail($id);
+
+            if ($user->role === 'dokter') {
+                // pastikan reservasi terkait jadwal milik dokter
+                $isOwner = false;
+                if ($reservasi->jadwal) {
+                    $isOwner = ($reservasi->jadwal->user_id === $user->id) || ($reservasi->jadwal->nama_dokter === $user->name);
+                }
+                if (! $isOwner) {
+                    abort(403);
+                }
+            }
+
             $reservasi->update([
                 'status' => $request->status,
             ]);
 
-            return redirect()->route('admin.reservasi.index')->with('success', 'Status reservasi diperbarui!');
+            // redirect ke halaman sesuai peran
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.reservasi.index')->with('success', 'Status reservasi diperbarui!');
+            } else {
+                return redirect()->route('dokter.rekam.index')->with('success', 'Status reservasi diperbarui!');
+            }
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memperbarui status: ' . $e->getMessage());

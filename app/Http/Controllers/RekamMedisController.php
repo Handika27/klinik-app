@@ -7,6 +7,7 @@ use App\Models\Reservasi;
 use App\Models\RekamMedis;
 use App\Models\ResepObat;
 use App\Models\Obat;
+use App\Models\JadwalDokter;
 
 class RekamMedisController extends Controller
 {
@@ -14,14 +15,18 @@ class RekamMedisController extends Controller
     public function index()
     {
         abort_if(auth()->user()->role !== 'dokter', 403);
+        // Tampilkan semua reservasi yang terkait dengan jadwal milik dokter (semua status)
+        $dokterId = auth()->user()->id;
+        $dokterName = auth()->user()->name;
 
-        $today = date('Y-m-d');
-        $jadwalIds = auth()->user()->jadwaldokters()->pluck('id')->toArray();
+        // Cari jadwal yang terkait dengan dokter melalui user_id atau nama_dokter
+        $jadwalIds = JadwalDokter::where(function($q) use ($dokterId, $dokterName) {
+            $q->where('user_id', $dokterId)->orWhere('nama_dokter', $dokterName);
+        })->pluck('id')->toArray();
 
         $reservasis = Reservasi::with(['pasien', 'jadwal'])
             ->whereIn('jadwal_id', $jadwalIds)
-            ->where('tanggal_kunjungan', $today)
-            ->where('status', 'dikonfirmasi')
+            ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
 
         return view('dokter.rekam.index', compact('reservasis'));

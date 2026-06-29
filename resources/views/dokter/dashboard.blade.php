@@ -11,7 +11,7 @@
                 <div class="p-6 text-gray-900">
                     {{ __("Selamat Datang di Panel Dokter Klinik") }}
                     <div class="mt-6">
-                        <a href="{{ route('dokter.rekam.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150">Lihat Pasien Hari Ini &rarr;</a>
+                        <a href="{{ route('dokter.reservasi.index') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150">Kelola Reservasi &rarr;</a>
                     </div>
                 </div>
             </div>

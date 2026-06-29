@@ -8,10 +8,14 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
-            <div class="mb-4">
+            <div class="mb-4 flex items-center gap-4">
                 <a href="{{ route('jadwal.create') }}" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded shadow transition duration-150">
                     + Tambah Jadwal Baru
                 </a>
+                <form action="{{ route('jadwal.syncUsers') }}" method="POST" onsubmit="return confirm('Jalankan sinkronisasi jadwal dengan daftar dokter?');">
+                    @csrf
+                    <button type="submit" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded shadow transition duration-150">Sinkronisasi Dokter</button>
+                </form>
             </div>
             @if(session('success'))
                 <div class="mb-4 bg-emerald-100 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded shadow-sm">

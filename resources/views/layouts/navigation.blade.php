@@ -15,6 +15,14 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if(auth()->user() && auth()->user()->role === 'pasien')
+                        <x-nav-link :href="route('pasien.jadwal')" :active="request()->routeIs('pasien.jadwal')">
+                            {{ __('Jadwal Dokter') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('pasien.reservasi.index')" :active="request()->routeIs('pasien.reservasi.index')">
+                            {{ __('Reservasi Saya') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +78,14 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if(auth()->user() && auth()->user()->role === 'pasien')
+                <x-responsive-nav-link :href="route('pasien.jadwal')" :active="request()->routeIs('pasien.jadwal')">
+                    {{ __('Jadwal Dokter') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('pasien.reservasi.index')" :active="request()->routeIs('pasien.reservasi.index')">
+                    {{ __('Reservasi Saya') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

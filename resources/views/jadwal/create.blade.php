@@ -14,8 +14,13 @@
     @csrf
 
     <div class="mb-4">
-        <label for="nama_dokter" class="block text-sm font-medium text-slate-700 mb-1">Nama Dokter</label>
-        <input type="text" name="nama_dokter" id="nama_dokter" class="w-full border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required placeholder="Contoh: Dr. Handika">
+        <label for="dokter_id" class="block text-sm font-medium text-slate-700 mb-1">Pilih Dokter</label>
+        <select name="dokter_id" id="dokter_id" class="w-full border-slate-300 rounded-lg shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+            <option value="">-- Pilih Dokter --</option>
+            @foreach($doctors as $doc)
+                <option value="{{ $doc->id }}">{{ $doc->name }} ({{ $doc->email }})</option>
+            @endforeach
+        </select>
     </div>
 
     <div class="mb-4">

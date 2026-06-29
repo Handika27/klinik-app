@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Pasien Hari Ini (Dikonfirmasi)') }}</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Daftar Reservasi (Semua Status)') }}</h2>
     </x-slot>
 
     <div class="py-12">
@@ -26,23 +26,36 @@
                                 <th class="border-b-2 p-3 font-semibold text-gray-700">Pasien</th>
                                 <th class="border-b-2 p-3 font-semibold text-gray-700">Tanggal</th>
                                 <th class="border-b-2 p-3 font-semibold text-gray-700">Antrean</th>
+                                <th class="border-b-2 p-3 font-semibold text-gray-700">Status</th>
                                 <th class="border-b-2 p-3 font-semibold text-gray-700">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($reservasis as $i => $r)
+                            @forelse($reservasis as $index => $r)
                                 <tr class="border-b hover:bg-slate-50 transition-colors">
-                                    <td class="p-4">{{ $i + 1 }}</td>
+                                    <td class="p-4">{{ $index + 1 }}</td>
                                     <td class="p-4 font-medium">{{ $r->pasien->name ?? '—' }}</td>
                                     <td class="p-4">{{ $r->tanggal_kunjungan }}</td>
                                     <td class="p-4">{{ $r->nomor_antrean }}</td>
                                     <td class="p-4">
-                                        <a href="{{ route('dokter.rekam.create', $r->id) }}" class="bg-indigo-600 hover:bg-indigo-700 text-white py-1 px-3 rounded">Isi Rekam</a>
+                                        <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : ($r->status == 'dikonfirmasi' ? 'bg-emerald-100 text-emerald-800' : ($r->status == 'selesai' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800')) }}">{{ ucfirst($r->status) }}</span>
+                                    </td>
+                                    <td class="p-4">
+                                        <form action="{{ route('dokter.reservasi.updateStatus', $r->id) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            <select name="status" class="border-gray-300 rounded-md mr-2">
+                                                <option value="pending" {{ $r->status=='pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="dikonfirmasi" {{ $r->status=='dikonfirmasi' ? 'selected' : '' }}>Setujui</option>
+                                                <option value="selesai" {{ $r->status=='selesai' ? 'selected' : '' }}>Selesai</option>
+                                                <option value="batal" {{ $r->status=='batal' ? 'selected' : '' }}>Tolak</option>
+                                            </select>
+                                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded">Simpan</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="p-6 text-center text-slate-500" colspan="5">Tidak ada pasien hari ini yang dikonfirmasi.</td>
+                                    <td class="p-6 text-center text-slate-500" colspan="6">Belum ada reservasi untuk jadwal Anda.</td>
                                 </tr>
                             @endforelse
                         </tbody>
