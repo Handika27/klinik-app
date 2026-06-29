@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="flex items-center justify-between mt-8">
-                            <a href="{{ route('pasien.jadwal') }}" class="text-gray-500 hover:text-gray-700 underline">Batal & Kembali</a>
+                            <button onclick="window.location.replace(@js(route('pasien.jadwal')))" class="text-gray-500 hover:text-gray-700 underline bg-transparent border-none cursor-pointer p-0">Batal & Kembali</button>
                             <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-6 rounded shadow transition duration-150">Booking Sekarang</button>
                         </div>
                     </form>

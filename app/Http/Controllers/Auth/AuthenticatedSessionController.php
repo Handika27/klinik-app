@@ -22,7 +22,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request)
     {
         $request->authenticate();
 
@@ -33,12 +33,15 @@ class AuthenticatedSessionController extends Controller
 
         // Arahkan berdasarkan role
         if ($role === 'admin') {
-            return redirect()->intended('/admin/dashboard');
+            $redirectUrl = '/admin/dashboard';
         } elseif ($role === 'dokter') {
-            return redirect()->intended('/dokter/dashboard');
+            $redirectUrl = '/dokter/dashboard';
         } else {
-            return redirect()->intended('/pasien/dashboard');
+            $redirectUrl = '/pasien/dashboard';
         }
+
+        // Gunakan view dengan location.replace() untuk mengganti history entry
+        return view('auth.login-redirect', ['redirectUrl' => $redirectUrl]);
     }
 
     /**

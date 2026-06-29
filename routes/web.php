@@ -8,6 +8,20 @@ use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\RekamMedisController;
 
 Route::get('/', function () {
+    // Log out user if authenticated when visiting home page
+    if (auth()->check()) {
+        auth()->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+        // Clear any cached data
+        request()->session()->flush();
+    }
+    
+    // Set anti-cache headers for the home page too
+    header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
+    
     return view('welcome');
 });
 

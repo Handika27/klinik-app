@@ -26,4 +26,33 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Prevent accidental back button/swipe back only on this dashboard page
+        (function() {
+            function setupDashboardProtection() {
+                // Push a dummy history entry to prevent immediate back navigation
+                history.pushState(null, null, location.href);
+            }
+
+            // Setup on initial load
+            setupDashboardProtection();
+
+            // Also setup when coming back to this page from history
+            window.addEventListener('pageshow', function(event) {
+                setupDashboardProtection();
+            });
+
+            window.addEventListener('popstate', function(event) {
+                // Show confirmation before allowing back
+                if (confirm('Yakin ingin keluar dari aplikasi?')) {
+                    // Redirect to home page which will log out
+                    window.location.replace('/');
+                } else {
+                    // Push another state to stay on current page
+                    history.pushState(null, null, location.href);
+                }
+            });
+        })();
+    </script>
 </x-app-layout>
