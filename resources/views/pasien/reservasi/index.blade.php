@@ -35,7 +35,7 @@
                                     <td class="p-4 font-medium">{{ $r->jadwal->nama_dokter ?? '—' }}</td>
                                     <td class="p-4">{{ $r->tanggal_kunjungan }}</td>
                                     <td class="p-4">{{ $r->nomor_antrean }}</td>
-                                    <td class="p-4">{{ ucfirst($r->status) }}</td>
+                                    <td class="p-4">{{ $r->status == 'pending' ? 'Menunggu' : ($r->status == 'dikonfirmasi' ? 'Disetujui' : ($r->status == 'selesai' ? 'Selesai' : 'Batal')) }}</td>
                                 </tr>
                             @empty
                                 <tr>

@@ -36,9 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('admin.dashboard');
 
     // Rute Dokter
-    Route::get('/dokter/dashboard', function () {
-        return view('dokter.dashboard');
-    })->name('dokter.dashboard');
+    Route::get('/dokter/dashboard', [RekamMedisController::class, 'dashboard'])->name('dokter.dashboard');
 
     // Rute Pasien
     Route::get('/pasien/dashboard', function () {

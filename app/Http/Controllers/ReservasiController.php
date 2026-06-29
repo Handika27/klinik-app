@@ -93,7 +93,7 @@ class ReservasiController extends Controller
             ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
 
-        return view('dokter.rekam.index', compact('reservasis'));
+        return view('admin.reservasi.index', compact('reservasis'));
     }
 
     // Ubah status reservasi (misal setujui atau tolak)

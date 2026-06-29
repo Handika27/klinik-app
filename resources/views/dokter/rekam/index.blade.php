@@ -38,7 +38,7 @@
                                     <td class="p-4">{{ $r->tanggal_kunjungan }}</td>
                                     <td class="p-4">{{ $r->nomor_antrean }}</td>
                                     <td class="p-4">
-                                        <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : ($r->status == 'dikonfirmasi' ? 'bg-emerald-100 text-emerald-800' : ($r->status == 'selesai' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800')) }}">{{ ucfirst($r->status) }}</span>
+                                        <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : ($r->status == 'dikonfirmasi' ? 'bg-emerald-100 text-emerald-800' : ($r->status == 'selesai' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800')) }}">{{ $r->status == 'pending' ? 'Menunggu' : ($r->status == 'dikonfirmasi' ? 'Disetujui' : ($r->status == 'selesai' ? 'Selesai' : 'Batal')) }}</span>
                                     </td>
                                     <td class="p-4">
                                         <form action="{{ route('dokter.reservasi.updateStatus', $r->id) }}" method="POST" class="inline-block">

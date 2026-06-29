@@ -33,6 +33,33 @@ class RekamMedisController extends Controller
         return view('dokter.rekam.index', compact('reservasis'));
     }
 
+    // Halaman dashboard dokter menampilkan antrean pasien yang sudah disetujui hari ini
+    public function dashboard()
+    {
+        abort_if(auth()->user()->role !== 'dokter', 403);
+
+        try {
+            $dokterId = auth()->user()->id;
+            $dokterName = auth()->user()->name;
+            $today = now()->format('Y-m-d');
+
+            $jadwalIds = JadwalDokter::where(function($q) use ($dokterId, $dokterName) {
+                $q->where('user_id', $dokterId)->orWhere('nama_dokter', $dokterName);
+            })->pluck('id')->toArray();
+
+            $reservasis = Reservasi::with(['pasien', 'jadwal'])
+                ->whereIn('jadwal_id', $jadwalIds)
+                ->where('status', 'dikonfirmasi')
+                ->where('tanggal_kunjungan', $today)
+                ->orderBy('nomor_antrean', 'asc')
+                ->get();
+
+            return view('dokter.dashboard', compact('reservasis'));
+        } catch (\Exception $e) {
+            return view('dokter.dashboard', ['reservasis' => collect()])->with('error', 'Gagal memuat antrean pasien: ' . $e->getMessage());
+        }
+    }
+
     // Form untuk membuat rekam medis untuk reservasi tertentu
     public function create($reservasiId)
     {
