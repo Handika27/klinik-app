@@ -35,7 +35,7 @@
                 <p class="px-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Menu Utama</p>
                 
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('*dashboard') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2 2z"></path></svg>
                     <span class="font-medium">Dashboard</span>
                 </a>
 
@@ -45,7 +45,7 @@
                         <span class="font-medium">Jadwal Dokter</span>
                     </a>
                     <a href="{{ route('pasien.reservasi.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.reservasi.index') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Reservasi Saya</span>
                     </a>
                     <a href="{{ route('pasien.riwayat') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.riwayat*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
@@ -56,7 +56,7 @@
 
                 @if(auth()->user() && in_array(auth()->user()->role, ['admin', 'dokter']))
                     <a href="{{ route('jadwal.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('jadwal.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Kelola Jadwal</span>
                     </a>
                 @endif
@@ -67,14 +67,14 @@
                         <span class="font-medium">Obat</span>
                     </a>
                     <a href="{{ route('admin.reservasi.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.reservasi.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Reservasi</span>
                     </a>
                 @endif
 
                 @if(auth()->user() && auth()->user()->role === 'dokter')
                     <a href="{{ route('dokter.reservasi.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('dokter.reservasi.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Kelola Reservasi</span>
                     </a>
                     @php
@@ -114,13 +114,13 @@
                     </div>
                 </div>
                 
-                <form method="POST" action="{{ route('logout') }}">
+                <form id="logout-form" method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        Log Out
-                    </button>
                 </form>
+                <button class="logout-button w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Log Out
+                </button>
             </div>
         </aside>
 
@@ -139,17 +139,17 @@
                 <p class="px-2 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Menu Utama</p>
                 
                 <a href="{{ route('dashboard') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('*dashboard') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2 2z"></path></svg>
                     <span class="font-medium">Dashboard</span>
                 </a>
 
                 @if(auth()->user() && auth()->user()->role === 'pasien')
                     <a href="{{ route('pasien.jadwal') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.jadwal') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Jadwal Dokter</span>
                     </a>
                     <a href="{{ route('pasien.reservasi.index') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.reservasi.index') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Reservasi Saya</span>
                     </a>
                     <a href="{{ route('pasien.riwayat') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.riwayat*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
@@ -160,7 +160,7 @@
 
                 @if(auth()->user() && in_array(auth()->user()->role, ['admin', 'dokter']))
                     <a href="{{ route('jadwal.index') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('jadwal.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Kelola Jadwal</span>
                     </a>
                 @endif
@@ -171,14 +171,14 @@
                         <span class="font-medium">Obat</span>
                     </a>
                     <a href="{{ route('admin.reservasi.index') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.reservasi.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Reservasi</span>
                     </a>
                 @endif
 
                 @if(auth()->user() && auth()->user()->role === 'dokter')
                     <a href="{{ route('dokter.reservasi.index') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('dokter.reservasi.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         <span class="font-medium">Kelola Reservasi</span>
                     </a>
                     @php
@@ -207,13 +207,10 @@
                     </div>
                 </div>
                 
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        Log Out
-                    </button>
-                </form>
+                <button class="logout-button w-full flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-red-500 hover:text-white rounded-lg transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Log Out
+                </button>
             </div>
         </aside>
 
@@ -248,6 +245,47 @@
 
     </div>
 
+    <!-- Modal Konfirmasi Keluar -->
+    <div id="logoutModal" class="fixed inset-0 z-50 hidden">
+        <!-- Overlay -->
+        <div id="logoutModalOverlay" class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
+        
+        <!-- Modal Container -->
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+            <!-- Modal Content -->
+            <div id="logoutModalContent" class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all scale-95 opacity-0">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Konfirmasi Keluar</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Body -->
+                <div class="p-6">
+                    <p class="text-slate-600 text-center">Yakin ingin keluar dari aplikasi?</p>
+                </div>
+                
+                <!-- Footer -->
+                <div class="bg-slate-50 px-6 py-4 flex gap-3">
+                    <button id="logoutModalCancel" class="flex-1 px-4 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-medium rounded-lg transition-colors">
+                        Batal
+                    </button>
+                    <button id="logoutModalConfirm" class="flex-1 px-4 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors">
+                        Keluar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('mobile-sidebar');
@@ -256,6 +294,80 @@
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
         }
+
+        // Modal Konfirmasi Keluar
+        let logoutCallback = null;
+
+        function showLogoutModal(callback) {
+            logoutCallback = callback;
+            const modal = document.getElementById('logoutModal');
+            const overlay = document.getElementById('logoutModalOverlay');
+            const content = document.getElementById('logoutModalContent');
+            
+            modal.classList.remove('hidden');
+            
+            // Animasi masuk
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function hideLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            const overlay = document.getElementById('logoutModalOverlay');
+            const content = document.getElementById('logoutModalContent');
+            
+            // Animasi keluar
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                logoutCallback = null;
+            }, 200);
+        }
+
+        // Event listeners untuk modal
+        document.getElementById('logoutModalCancel').addEventListener('click', function() {
+            hideLogoutModal();
+            if (logoutCallback) {
+                logoutCallback(false);
+            }
+        });
+
+        document.getElementById('logoutModalConfirm').addEventListener('click', function() {
+            hideLogoutModal();
+            if (logoutCallback) {
+                logoutCallback(true);
+            }
+        });
+
+        document.getElementById('logoutModalOverlay').addEventListener('click', function() {
+            hideLogoutModal();
+            if (logoutCallback) {
+                logoutCallback(false);
+            }
+        });
+
+        // Event listener untuk semua tombol Log Out
+        document.querySelectorAll('.logout-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Tutup mobile sidebar jika terbuka
+                const mobileSidebar = document.getElementById('mobile-sidebar');
+                const mobileOverlay = document.getElementById('mobile-overlay');
+                if (!mobileSidebar.classList.contains('-translate-x-full')) {
+                    mobileSidebar.classList.add('-translate-x-full');
+                    mobileOverlay.classList.add('hidden');
+                }
+                
+                showLogoutModal(function(confirmed) {
+                    if (confirmed) {
+                        document.getElementById('logout-form').submit();
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

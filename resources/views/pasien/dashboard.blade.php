@@ -23,28 +23,29 @@
     <script>
         // Prevent accidental back button/swipe back only on this dashboard page
         (function() {
-            function setupDashboardProtection() {
-                // Push a dummy history entry to prevent immediate back navigation
-                history.pushState(null, null, location.href);
-            }
+            // Setup initial history state
+            history.replaceState({ dashboard: true }, '', location.href);
+            
+            // Always keep one extra state so back button triggers popstate
+            history.pushState(null, '', location.href);
 
-            // Setup on initial load
-            setupDashboardProtection();
-
-            // Also setup when coming back to this page from history
             window.addEventListener('pageshow', function(event) {
-                setupDashboardProtection();
+                if (event.persisted) {
+                    history.replaceState({ dashboard: true }, '', location.href);
+                    history.pushState(null, '', location.href);
+                }
             });
 
             window.addEventListener('popstate', function(event) {
-                // Show confirmation before allowing back
-                if (confirm('Yakin ingin keluar dari aplikasi?')) {
-                    // Redirect to home page which will log out
-                    window.location.replace('/');
-                } else {
-                    // Push another state to stay on current page
-                    history.pushState(null, null, location.href);
-                }
+                // Always show confirmation on back button
+                showLogoutModal(function(confirmed) {
+                    if (confirmed) {
+                        window.location.replace('/');
+                    } else {
+                        // Push state again to prevent further back attempts
+                        history.pushState(null, '', location.href);
+                    }
+                });
             });
         })();
     </script>
