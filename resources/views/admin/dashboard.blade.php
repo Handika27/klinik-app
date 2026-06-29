@@ -14,6 +14,12 @@
                         <a href="{{ route('jadwal.index') }}" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition duration-150">
                             Kelola Jadwal Dokter &rarr;
                         </a>
+                        <a href="{{ route('obat.index') }}" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded transition duration-150 ml-4">
+                            Kelola Data Obat &rarr;
+                        </a>
+                        <a href="{{ route('admin.reservasi.index') }}" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded transition duration-150 ml-4">
+                            Kelola Reservasi &rarr;
+                        </a>
                     </div>
                 </div>
                 
