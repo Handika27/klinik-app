@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JadwalDokterController;
+use App\Http\Controllers\ObatController;
+use App\Http\Controllers\ReservasiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,6 +46,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Rute CRUD Jadwal Dokter (Hanya bisa diakses yang sudah login)
     Route::resource('jadwal', JadwalDokterController::class);
+    // Rute CRUD Obat
+    Route::resource('obat', ObatController::class);
+    // Reservasi: pasien melihat jadwal & booking
+    Route::get('pasien/jadwal', [ReservasiController::class, 'pasienJadwal'])->name('pasien.jadwal');
+    Route::get('reservasi/create/{jadwal}', [ReservasiController::class, 'create'])->name('reservasi.create');
+    Route::post('reservasi', [ReservasiController::class, 'store'])->name('reservasi.store');
+
+    // Admin reservasi management
+    Route::get('admin/reservasi', [ReservasiController::class, 'adminIndex'])->name('admin.reservasi.index');
+    Route::post('admin/reservasi/{id}/status', [ReservasiController::class, 'updateStatus'])->name('admin.reservasi.updateStatus');
 
 });
 
