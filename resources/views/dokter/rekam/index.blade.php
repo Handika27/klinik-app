@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Daftar Reservasi (Semua Status)') }}</h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Reservasi Pasien Saya') }}</h2>
     </x-slot>
 
     <div class="py-12">
@@ -51,6 +51,11 @@
                                             </select>
                                             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded">Simpan</button>
                                         </form>
+                                        @if($r->status === 'dikonfirmasi')
+                                            <div class="mt-2">
+                                                <a href="{{ route('dokter.rekam.create', $r->id) }}" class="inline-block text-sm text-green-700 hover:underline">Isi Rekam</a>
+                                            </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty

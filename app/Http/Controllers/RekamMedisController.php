@@ -26,6 +26,7 @@ class RekamMedisController extends Controller
 
         $reservasis = Reservasi::with(['pasien', 'jadwal'])
             ->whereIn('jadwal_id', $jadwalIds)
+            ->where('status', 'dikonfirmasi')
             ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
 
@@ -38,6 +39,17 @@ class RekamMedisController extends Controller
         abort_if(auth()->user()->role !== 'dokter', 403);
 
         $reservasi = Reservasi::with(['pasien', 'jadwal'])->findOrFail($reservasiId);
+
+        $dokterId = auth()->user()->id;
+        $isOwner = false;
+        if ($reservasi->jadwal) {
+            $isOwner = ($reservasi->jadwal->user_id === $dokterId) || ($reservasi->jadwal->nama_dokter === auth()->user()->name);
+        }
+
+        if (! $isOwner || $reservasi->status !== 'dikonfirmasi') {
+            abort(403);
+        }
+
         $obats = Obat::all();
         return view('dokter.rekam.create', compact('reservasi', 'obats'));
     }
@@ -53,7 +65,17 @@ class RekamMedisController extends Controller
         ]);
 
         try {
-            $reservasi = Reservasi::findOrFail($request->reservasi_id);
+            $reservasi = Reservasi::with('jadwal')->findOrFail($request->reservasi_id);
+
+            $dokterId = auth()->user()->id;
+            $isOwner = false;
+            if ($reservasi->jadwal) {
+                $isOwner = ($reservasi->jadwal->user_id === $dokterId) || ($reservasi->jadwal->nama_dokter === auth()->user()->name);
+            }
+
+            if (! $isOwner || $reservasi->status !== 'dikonfirmasi') {
+                abort(403);
+            }
 
             $rekam = RekamMedis::create([
                 'reservasi_id' => $reservasi->id,

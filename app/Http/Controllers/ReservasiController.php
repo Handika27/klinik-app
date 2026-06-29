@@ -82,14 +82,18 @@ class ReservasiController extends Controller
         abort_if(auth()->user()->role !== 'dokter', 403);
 
         $dokterId = auth()->user()->id;
-        $jadwalIds = \App\Models\JadwalDokter::where('user_id', $dokterId)->pluck('id')->toArray();
+        $dokterName = auth()->user()->name;
+        $jadwalIds = \App\Models\JadwalDokter::where(function ($q) use ($dokterId, $dokterName) {
+            $q->where('user_id', $dokterId)
+              ->orWhere('nama_dokter', $dokterName);
+        })->pluck('id')->toArray();
 
         $reservasis = Reservasi::with(['pasien', 'jadwal'])
             ->whereIn('jadwal_id', $jadwalIds)
             ->orderBy('tanggal_kunjungan', 'desc')
             ->get();
 
-        return view('admin.reservasi.index', compact('reservasis'));
+        return view('dokter.rekam.index', compact('reservasis'));
     }
 
     // Ubah status reservasi (misal setujui atau tolak)
