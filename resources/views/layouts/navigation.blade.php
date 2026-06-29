@@ -13,35 +13,41 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                    @if(auth()->user() && auth()->user()->role === 'admin')
-                        <x-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
-                            {{ __('Jadwal Dokter') }}
+                            {{ __('Dashboard') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('obat.index')" :active="request()->routeIs('obat.*')">
-                            {{ __('Obat') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('admin.reservasi.index')" :active="request()->routeIs('admin.reservasi.*')">
-                            {{ __('Reservasi') }}
-                        </x-nav-link>
-                    @endif
-                    @if(auth()->user() && auth()->user()->role === 'dokter')
-                        <x-nav-link :href="route('dokter.reservasi.index')" :active="request()->routeIs('dokter.reservasi.*')">
-                            {{ __('Kelola Reservasi') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('dokter.rekam.index')" :active="request()->routeIs('dokter.rekam.*')">
-                            {{ __('Rekam Medis') }}
-                        </x-nav-link>
-                    @endif
-                    @if(auth()->user() && auth()->user()->role === 'pasien')
-                        <x-nav-link :href="route('pasien.jadwal')" :active="request()->routeIs('pasien.jadwal')">
-                            {{ __('Jadwal Dokter') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('pasien.reservasi.index')" :active="request()->routeIs('pasien.reservasi.index')">
-                            {{ __('Reservasi Saya') }}
-                        </x-nav-link>
-                    @endif
+                        @if(auth()->user() && auth()->user()->role === 'admin')
+                            <x-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
+                                {{ __('Kelola Jadwal') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('obat.index')" :active="request()->routeIs('obat.*')">
+                                {{ __('Obat') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('admin.reservasi.index')" :active="request()->routeIs('admin.reservasi.*')">
+                                {{ __('Reservasi') }}
+                            </x-nav-link>
+                        @endif
+                        @if(auth()->user() && auth()->user()->role === 'dokter')
+                            <x-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
+                                {{ __('Kelola Jadwal') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('dokter.reservasi.index')" :active="request()->routeIs('dokter.reservasi.*')">
+                                {{ __('Kelola Reservasi') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('dokter.rekam.index')" :active="request()->routeIs('dokter.rekam.*')">
+                                {{ __('Rekam Medis') }}
+                            </x-nav-link>
+                        @endif
+                        @if(auth()->user() && auth()->user()->role === 'pasien')
+                            <x-nav-link :href="route('pasien.jadwal')" :active="request()->routeIs('pasien.jadwal')">
+                                {{ __('Jadwal Dokter') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('pasien.reservasi.index')" :active="request()->routeIs('pasien.reservasi.index')">
+                                {{ __('Reservasi Saya') }}
+                            </x-nav-link>
+                            <x-nav-link :href="route('pasien.riwayat')" :active="request()->routeIs('pasien.riwayat', 'pasien.riwayat.show')">
+                                {{ __('Riwayat Pemeriksaan') }}
+                            </x-nav-link>
+                        @endif
                 </div>
             </div>
 
@@ -99,7 +105,7 @@
             </x-responsive-nav-link>
             @if(auth()->user() && auth()->user()->role === 'admin')
                 <x-responsive-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
-                    {{ __('Jadwal Dokter') }}
+                    {{ __('Kelola Jadwal') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('obat.index')" :active="request()->routeIs('obat.*')">
                     {{ __('Obat') }}
@@ -109,6 +115,9 @@
                 </x-responsive-nav-link>
             @endif
             @if(auth()->user() && auth()->user()->role === 'dokter')
+                <x-responsive-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
+                    {{ __('Kelola Jadwal') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dokter.reservasi.index')" :active="request()->routeIs('dokter.reservasi.*')">
                     {{ __('Kelola Reservasi') }}
                 </x-responsive-nav-link>
@@ -122,6 +131,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('pasien.reservasi.index')" :active="request()->routeIs('pasien.reservasi.index')">
                     {{ __('Reservasi Saya') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('pasien.riwayat')" :active="request()->routeIs('pasien.riwayat', 'pasien.riwayat.show')">
+                    {{ __('Riwayat Pemeriksaan') }}
                 </x-responsive-nav-link>
             @endif
         </div>

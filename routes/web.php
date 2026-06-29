@@ -43,10 +43,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('pasien.dashboard');
     })->name('pasien.dashboard');
 
-    // Rute CRUD Jadwal Dokter (Hanya bisa diakses yang sudah login)
+    // Rute CRUD Jadwal Dokter dan Obat
     Route::resource('jadwal', JadwalDokterController::class);
     Route::post('jadwal/sync-users', [JadwalDokterController::class, 'syncUsers'])->name('jadwal.syncUsers');
-    // Rute CRUD Obat
     Route::resource('obat', ObatController::class);
     // Reservasi: pasien melihat jadwal & booking
     Route::get('pasien/jadwal', [ReservasiController::class, 'pasienJadwal'])->name('pasien.jadwal');
@@ -64,6 +63,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('dokter/rekam', [RekamMedisController::class, 'store'])->name('dokter.rekam.store');
     Route::post('dokter/reservasi/{id}/status', [ReservasiController::class, 'updateStatus'])->name('dokter.reservasi.updateStatus');
     Route::get('dokter/reservasi', [ReservasiController::class, 'dokterIndex'])->name('dokter.reservasi.index');
+
+    // Pasien: riwayat rekam medis
+    Route::get('pasien/riwayat', [RekamMedisController::class, 'riwayatPasien'])->name('pasien.riwayat');
+    Route::get('pasien/riwayat/{id}', [RekamMedisController::class, 'showPasien'])->name('pasien.riwayat.show');
 
 });
 

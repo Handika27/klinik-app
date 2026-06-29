@@ -37,6 +37,29 @@ class ReservasiController extends Controller
         ]);
 
         try {
+            // Ambil jadwal dokter
+            $jadwal = \App\Models\JadwalDokter::findOrFail($request->jadwal_id);
+
+            // Konversi nama hari Bahasa Indonesia ke index
+            $hariToIndex = [
+                'Minggu' => 0,
+                'Senin' => 1,
+                'Selasa' => 2,
+                'Rabu' => 3,
+                'Kamis' => 4,
+                'Jumat' => 5,
+                'Sabtu' => 6
+            ];
+
+            // Cek hari dari tanggal yang dipilih
+            $tanggal = \Carbon\Carbon::parse($request->tanggal_kunjungan);
+            $indexHariTanggal = $tanggal->dayOfWeek;
+            $indexHariJadwal = $hariToIndex[$jadwal->hari] ?? null;
+
+            if ($indexHariTanggal !== $indexHariJadwal) {
+                return redirect()->back()->with('error', 'Gagal membuat reservasi: Tanggal kunjungan harus sesuai dengan hari jadwal dokter (' . $jadwal->hari . ')!');
+            }
+
             // hitung nomor antrean berdasarkan jadwal + tanggal
             $count = Reservasi::where('jadwal_id', $request->jadwal_id)
                 ->where('tanggal_kunjungan', $request->tanggal_kunjungan)
@@ -72,7 +95,7 @@ class ReservasiController extends Controller
     {
         abort_if(auth()->user()->role !== 'pasien', 403);
 
-        $reservasis = Reservasi::with(['jadwal'])->where('pasien_id', auth()->user()->id)->orderBy('tanggal_kunjungan', 'desc')->get();
+        $reservasis = Reservasi::with(['jadwal', 'rekamMedis'])->where('pasien_id', auth()->user()->id)->orderBy('tanggal_kunjungan', 'desc')->get();
         return view('pasien.reservasi.index', compact('reservasis'));
     }
 

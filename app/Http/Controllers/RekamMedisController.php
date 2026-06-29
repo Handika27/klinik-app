@@ -137,4 +137,29 @@ class RekamMedisController extends Controller
             return redirect()->back()->with('error', 'Gagal menyimpan rekam medis: ' . $e->getMessage());
         }
     }
+
+    // Tampilkan riwayat rekam medis untuk pasien
+    public function riwayatPasien()
+    {
+        abort_if(auth()->user()->role !== 'pasien', 403);
+
+        $riwayats = RekamMedis::with(['dokter', 'reservasi.jadwal', 'resepObats.obat'])
+            ->where('pasien_id', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('pasien.riwayat', compact('riwayats'));
+    }
+
+    // Tampilkan detail satu rekam medis untuk pasien
+    public function showPasien($id)
+    {
+        abort_if(auth()->user()->role !== 'pasien', 403);
+
+        $rekam = RekamMedis::with(['dokter', 'reservasi.jadwal', 'resepObats.obat'])
+            ->where('pasien_id', auth()->user()->id)
+            ->findOrFail($id);
+
+        return view('pasien.riwayat-detail', compact('rekam'));
+    }
 }

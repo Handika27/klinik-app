@@ -9,17 +9,29 @@ class ObatController extends Controller
 {
     public function index()
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        
         $obats = Obat::all();
         return view('obat.index', compact('obats'));
     }
 
     public function create()
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        
         return view('obat.create');
     }
 
     public function store(Request $request)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        
         $request->validate([
             'nama_obat' => 'required|string',
             'stok' => 'required|integer|min:0',
@@ -42,12 +54,20 @@ class ObatController extends Controller
 
     public function edit($id)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        
         $obat = Obat::findOrFail($id);
         return view('obat.edit', compact('obat'));
     }
 
     public function update(Request $request, $id)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        
         $request->validate([
             'nama_obat' => 'required|string',
             'stok' => 'required|integer|min:0',
@@ -71,6 +91,10 @@ class ObatController extends Controller
 
     public function destroy($id)
     {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        
         try {
             $obat = Obat::findOrFail($id);
             $obat->delete();

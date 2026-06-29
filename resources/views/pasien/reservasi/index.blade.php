@@ -26,6 +26,7 @@
                                 <th class="border-b-2 p-3 font-semibold text-gray-700">Tanggal</th>
                                 <th class="border-b-2 p-3 font-semibold text-gray-700">Antrean</th>
                                 <th class="border-b-2 p-3 font-semibold text-gray-700">Status</th>
+                                <th class="border-b-2 p-3 font-semibold text-gray-700">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,11 +36,22 @@
                                     <td class="p-4 font-medium">{{ $r->jadwal->nama_dokter ?? '—' }}</td>
                                     <td class="p-4">{{ $r->tanggal_kunjungan }}</td>
                                     <td class="p-4">{{ $r->nomor_antrean }}</td>
-                                    <td class="p-4">{{ $r->status == 'pending' ? 'Menunggu' : ($r->status == 'dikonfirmasi' ? 'Disetujui' : ($r->status == 'selesai' ? 'Selesai' : 'Batal')) }}</td>
+                                    <td class="p-4">
+                                        <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : ($r->status == 'dikonfirmasi' ? 'bg-emerald-100 text-emerald-800' : ($r->status == 'selesai' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800')) }}">
+                                            {{ $r->status == 'pending' ? 'Menunggu' : ($r->status == 'dikonfirmasi' ? 'Disetujui' : ($r->status == 'selesai' ? 'Selesai' : 'Batal')) }}
+                                        </span>
+                                    </td>
+                                    <td class="p-4">
+                                        @if($r->status == 'selesai' && $r->rekamMedis)
+                                            <a href="{{ route('pasien.riwayat.show', $r->rekamMedis->id) }}" class="text-purple-600 hover:text-purple-800 text-sm font-medium">
+                                                Lihat Hasil &rarr;
+                                            </a>
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="p-6 text-center text-slate-500" colspan="5">Anda belum memiliki reservasi.</td>
+                                    <td class="p-6 text-center text-slate-500" colspan="6">Anda belum memiliki reservasi.</td>
                                 </tr>
                             @endforelse
                         </tbody>

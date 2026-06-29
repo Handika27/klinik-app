@@ -26,4 +26,9 @@ class Reservasi extends Model
     {
         return $this->belongsTo(\App\Models\JadwalDokter::class, 'jadwal_id');
     }
+
+    public function rekamMedis()
+    {
+        return $this->hasOne(\App\Models\RekamMedis::class, 'reservasi_id');
+    }
 }

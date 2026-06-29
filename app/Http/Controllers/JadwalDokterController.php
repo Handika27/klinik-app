@@ -13,6 +13,10 @@ class JadwalDokterController extends Controller
      */
     public function index()
     {
+        if (!in_array(auth()->user()->role, ['admin', 'dokter'])) {
+            abort(403);
+        }
+        
         // Mengambil semua data dari tabel jadwal_dokters
         $jadwals = JadwalDokter::all();
         
@@ -25,6 +29,10 @@ class JadwalDokterController extends Controller
      */
     public function create()
     {
+        if (!in_array(auth()->user()->role, ['admin', 'dokter'])) {
+            abort(403);
+        }
+        
         // Ambil daftar user dengan role dokter
         $doctors = User::where('role', 'dokter')->get();
         return view('jadwal.create', compact('doctors'));

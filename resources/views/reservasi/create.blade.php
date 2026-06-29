@@ -13,6 +13,7 @@
                     <div class="mb-4">
                         <h3 class="text-lg font-medium">{{ $jadwal->nama_dokter }} — {{ $jadwal->hari }}</h3>
                         <p class="text-sm text-slate-600">Jam: {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }}</p>
+                        <p class="text-sm text-orange-600 font-medium mt-2">*Catatan: Hanya bisa memilih tanggal sesuai dengan hari jadwal ({{ $jadwal->hari }})</p>
                     </div>
 
                     <form action="{{ route('reservasi.store') }}" method="POST">
@@ -39,4 +40,37 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Fungsi untuk mengonversi nama hari Bahasa Indonesia ke indeks hari (0=Minggu, 1=Senin, ..., 6=Sabtu)
+        const hariToIndex = {
+            'Minggu': 0,
+            'Senin': 1,
+            'Selasa': 2,
+            'Rabu': 3,
+            'Kamis': 4,
+            'Jumat': 5,
+            'Sabtu': 6
+        };
+
+        const targetHari = '{{ $jadwal->hari }}';
+        const targetIndex = hariToIndex[targetHari];
+
+        const dateInput = document.getElementById('tanggal_kunjungan');
+
+        // Fungsi untuk memfilter tanggal saat user memilih
+        dateInput.addEventListener('input', function() {
+            const selectedDate = new Date(this.value);
+            const selectedDayIndex = selectedDate.getDay();
+            
+            if (selectedDayIndex !== targetIndex) {
+                alert('Maaf, hanya bisa memilih tanggal pada hari ' + targetHari + '!');
+                this.value = '';
+            }
+        });
+
+        // Set tanggal minimum ke hari ini
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+    </script>
 </x-app-layout>
