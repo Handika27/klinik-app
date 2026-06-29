@@ -67,6 +67,15 @@ class ReservasiController extends Controller
         return view('admin.reservasi.index', compact('reservasis'));
     }
 
+    // Halaman pasien melihat daftar reservasi miliknya
+    public function pasienIndex()
+    {
+        abort_if(auth()->user()->role !== 'pasien', 403);
+
+        $reservasis = Reservasi::with(['jadwal'])->where('pasien_id', auth()->user()->id)->orderBy('tanggal_kunjungan', 'desc')->get();
+        return view('pasien.reservasi.index', compact('reservasis'));
+    }
+
     // Ubah status reservasi (misal setujui atau tolak)
     public function updateStatus(Request $request, $id)
     {

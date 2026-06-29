@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JadwalDokterController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\ReservasiController;
+use App\Http\Controllers\RekamMedisController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,12 +51,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('obat', ObatController::class);
     // Reservasi: pasien melihat jadwal & booking
     Route::get('pasien/jadwal', [ReservasiController::class, 'pasienJadwal'])->name('pasien.jadwal');
+    Route::get('pasien/reservasi', [ReservasiController::class, 'pasienIndex'])->name('pasien.reservasi.index');
     Route::get('reservasi/create/{jadwal}', [ReservasiController::class, 'create'])->name('reservasi.create');
     Route::post('reservasi', [ReservasiController::class, 'store'])->name('reservasi.store');
 
     // Admin reservasi management
     Route::get('admin/reservasi', [ReservasiController::class, 'adminIndex'])->name('admin.reservasi.index');
     Route::post('admin/reservasi/{id}/status', [ReservasiController::class, 'updateStatus'])->name('admin.reservasi.updateStatus');
+
+    // Dokter: lihat pasien hari ini yang sudah dikonfirmasi + isi rekam medis
+    Route::get('dokter/pasien-hari-ini', [RekamMedisController::class, 'index'])->name('dokter.rekam.index');
+    Route::get('dokter/rekam/create/{reservasi}', [RekamMedisController::class, 'create'])->name('dokter.rekam.create');
+    Route::post('dokter/rekam', [RekamMedisController::class, 'store'])->name('dokter.rekam.store');
 
 });
 

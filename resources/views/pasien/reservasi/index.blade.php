@@ -1,0 +1,40 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ __('Reservasi Saya') }}</h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border-b-2 p-3 font-semibold text-gray-700">No</th>
+                                <th class="border-b-2 p-3 font-semibold text-gray-700">Dokter</th>
+                                <th class="border-b-2 p-3 font-semibold text-gray-700">Tanggal</th>
+                                <th class="border-b-2 p-3 font-semibold text-gray-700">Antrean</th>
+                                <th class="border-b-2 p-3 font-semibold text-gray-700">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($reservasis as $i => $r)
+                                <tr class="border-b hover:bg-slate-50 transition-colors">
+                                    <td class="p-4">{{ $i + 1 }}</td>
+                                    <td class="p-4 font-medium">{{ $r->jadwal->nama_dokter ?? '—' }}</td>
+                                    <td class="p-4">{{ $r->tanggal_kunjungan }}</td>
+                                    <td class="p-4">{{ $r->nomor_antrean }}</td>
+                                    <td class="p-4">{{ ucfirst($r->status) }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td class="p-6 text-center text-slate-500" colspan="5">Anda belum memiliki reservasi.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
