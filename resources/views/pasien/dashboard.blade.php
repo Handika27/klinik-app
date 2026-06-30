@@ -1,17 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Dashboard') }}
-            </h2>
-            <!-- Status Klinik -->
-            <div class="flex items-center gap-2">
-                <span class="text-sm text-slate-500">Status Klinik:</span>
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                    <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
-                    <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
-                </div>
+        <!-- Logo App -->
+        <div class="flex items-center gap-2">
+            <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
+                 <div class="w-2.5 h-2.5 rounded-full bg-white opacity-80"></div>
             </div>
+            <span class="text-lg font-bold tracking-tight">Klinik <span class="font-normal text-emerald-600">Medika</span></span>
         </div>
     </x-slot>
 

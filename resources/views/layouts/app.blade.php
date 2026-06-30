@@ -242,23 +242,30 @@
             
             <!-- Header dengan Menu Hamburger -->
             <header class="bg-white shadow-sm border-b border-slate-200 z-10">
-                <div class="py-5 px-6 sm:px-8 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-                    <div class="flex items-center gap-3 flex-1">
+                <div class="flex items-center justify-between w-full h-14 px-4 overflow-hidden">
+                    <!-- Kiri: Hamburger & Header -->
+                    <div class="flex items-center gap-2">
                         <button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
                             <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
                         </button>
                         
-                        <div class="flex-1">
-                            @if (isset($header))
-                                {{ $header }}
-                            @endif
-                        </div>
+                        @if(isset($header))
+                            {{ $header }}
+                        @endif
                     </div>
                     
-                    <div class="flex items-center gap-4 justify-start sm:justify-end">
-                        <span class="text-sm text-slate-500">{{ now()->format('l, d F Y') }}</span>
+                    <!-- Kanan: Status Klinik & Tanggal -->
+                    <div class="flex items-center gap-2 sm:gap-4">
+                        <!-- Badge Status Klinik -->
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                            <span class="w-1.5 h-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
+                            <span>{{ $clinicOperationalMessage }}</span>
+                        </div>
+                        
+                        <!-- Tanggal - Hidden di Mobile -->
+                        <span class="hidden sm:block text-xs sm:text-sm text-gray-500 whitespace-nowrap">{{ now()->format('l, d F Y') }}</span>
                     </div>
                 </div>
             </header>
