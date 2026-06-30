@@ -6,6 +6,7 @@ use App\Http\Controllers\JadwalDokterController;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\RekamMedisController;
+use App\Http\Controllers\AnnouncementController;
 
 Route::get('/', function () {
     // Log out user if authenticated when visiting home page
@@ -53,14 +54,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dokter/dashboard', [RekamMedisController::class, 'dashboard'])->name('dokter.dashboard');
 
     // Rute Pasien
-    Route::get('/pasien/dashboard', function () {
-        return view('pasien.dashboard');
+    Route::get('/pasien/dashboard', function() {
+        $announcements = \App\Models\Announcement::where('is_active', true)
+            ->orderBy('tanggal_rilis', 'desc')
+            ->get();
+        return view('pasien.dashboard', compact('announcements'));
     })->name('pasien.dashboard');
 
     // Rute CRUD Jadwal Dokter dan Obat
     Route::resource('jadwal', JadwalDokterController::class);
     Route::post('jadwal/sync-users', [JadwalDokterController::class, 'syncUsers'])->name('jadwal.syncUsers');
     Route::resource('obat', ObatController::class);
+    Route::resource('announcements', AnnouncementController::class);
     // Reservasi: pasien melihat jadwal & booking
     Route::get('pasien/jadwal', [ReservasiController::class, 'pasienJadwal'])->name('pasien.jadwal');
     Route::get('pasien/reservasi', [ReservasiController::class, 'pasienIndex'])->name('pasien.reservasi.index');

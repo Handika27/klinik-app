@@ -7,6 +7,32 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            
+            @if($announcements->count() > 0)
+                <div class="mb-6 space-y-4">
+                    @foreach($announcements as $announcement)
+                        <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-2xl shadow-lg overflow-hidden">
+                            <div class="p-6">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 110-6M16 13a5 5 0 110-10 5 5 0 010 10z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center justify-between gap-2">
+                                            <h3 class="text-lg font-bold">{{ $announcement->judul }}</h3>
+                                            <span class="text-xs bg-white/20 px-2 py-1 rounded-full">{{ $announcement->tanggal_rilis->format('d/m/Y H:i') }}</span>
+                                        </div>
+                                        <p class="mt-2 text-indigo-100">{{ $announcement->konten }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+            
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("Selamat Datang di Klinik") }}
