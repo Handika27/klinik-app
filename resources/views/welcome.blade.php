@@ -12,53 +12,94 @@
 </head>
 <body class="font-sans antialiased bg-slate-50 text-slate-900">
 
-    <nav class="w-full bg-white shadow-sm py-4 px-6 md:px-12 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
-                 <div class="w-3 h-3 rounded-full bg-white opacity-80"></div>
+    <!-- Sticky Navbar -->
+    <nav class="sticky top-0 z-50 w-full bg-white shadow-sm py-3 px-6 md:px-12">
+        <!-- Mobile Layout: 2 Rows -->
+        <div class="md:hidden">
+            <!-- Top Row: Logo + Auth Buttons -->
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+                         <div class="w-3 h-3 rounded-full bg-white opacity-80"></div>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight">Klinik <span class="font-normal text-emerald-600">Medika</span></span>
+                </div>
+
+                @if (Route::has('login'))
+                    <div class="flex items-center gap-4">
+                        @auth
+                            <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
+                                Kembali ke Dashboard &rarr;
+                            </a>
+                        @else
+                            <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
+                                Log in
+                            </a>
+
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow transition">
+                                    Register
+                                </a>
+                            @endif
+                        @endauth
+                    </div>
+                @endif
             </div>
-            <span class="text-xl font-bold tracking-tight">Klinik <span class="font-normal text-emerald-600">Medika</span></span>
+
+            <!-- Bottom Row: Status Klinik (Center) -->
+            <div class="flex items-center justify-center gap-2">
+                <span class="text-sm text-slate-500">Status Klinik:</span>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                    <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
+                    <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Status Klinik -->
-        <div class="hidden md:flex items-center gap-2">
-            <span class="text-sm text-slate-500">Status:</span>
-            <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
-                <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
+        <!-- Desktop Layout: 1 Row (3 Columns) -->
+        <div class="hidden md:flex items-center justify-between">
+            <!-- Left: Logo -->
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center">
+                     <div class="w-3 h-3 rounded-full bg-white opacity-80"></div>
+                </div>
+                <span class="text-xl font-bold tracking-tight">Klinik <span class="font-normal text-emerald-600">Medika</span></span>
             </div>
-        </div>
 
-        @if (Route::has('login'))
-            <div class="flex items-center gap-4">
-                @auth
-                    <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
-                        Kembali ke Dashboard &rarr;
-                    </a>
-                @else
-                    <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
-                        Log in
-                    </a>
+            <!-- Center: Status Klinik -->
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-slate-500">Status Klinik:</span>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                    <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
+                    <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
+                </div>
+            </div>
 
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow transition">
-                            Register
+            <!-- Right: Auth Buttons -->
+            @if (Route::has('login'))
+                <div class="flex items-center gap-4">
+                    @auth
+                        <a href="{{ url('/dashboard') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
+                            Kembali ke Dashboard &rarr;
                         </a>
-                    @endif
-                @endauth
-            </div>
-        @endif
+                    @else
+                        <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
+                            Log in
+                        </a>
+
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow transition">
+                                Register
+                            </a>
+                        @endif
+                    @endauth
+                </div>
+            @endif
+        </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-6 md:px-12 py-8 md:py-16">
-        
-        <!-- Status Klinik Mobile -->
-        <div class="md:hidden mb-6">
-            <div class="flex items-center justify-center gap-2 px-4 py-3 rounded-xl {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                <span class="w-3 h-3 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
-                <span class="font-semibold">{{ $clinicOperationalMessage }}</span>
-            </div>
-        </div>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 md:px-12 pt-8 pb-16 md:pt-16 md:pb-24">
 
         <!-- Hero Section -->
         <div class="flex flex-col-reverse md:flex-row items-center gap-12 py-8 mb-12">

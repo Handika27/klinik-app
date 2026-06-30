@@ -1,19 +1,29 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight flex items-center gap-3">
-            {{ __('Dashboard Dokter') }}
-            @php
-                $count = $reservasis->count();
-                $badgeColor = $count === 0 ? 'bg-emerald-500' : ($count <= 3 ? 'bg-yellow-500' : 'bg-red-500');
-                $badgeLight = $count === 0 ? 'bg-emerald-100 text-emerald-800' : ($count <= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800');
-                $ringColor = $count === 0 ? 'ring-emerald-400' : ($count <= 3 ? 'ring-yellow-400' : 'ring-red-400');
-            @endphp
-            @if($count > 0)
-                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full {{ $badgeColor }} text-white text-xs font-bold animate-pulse">
-                    {{ $count }}
-                </span>
-            @endif
-        </h2>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 w-full">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight flex items-center gap-3">
+                {{ __('Dashboard Dokter') }}
+                @php
+                    $count = $reservasis->count();
+                    $badgeColor = $count === 0 ? 'bg-emerald-500' : ($count <= 3 ? 'bg-yellow-500' : 'bg-red-500');
+                    $badgeLight = $count === 0 ? 'bg-emerald-100 text-emerald-800' : ($count <= 3 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800');
+                    $ringColor = $count === 0 ? 'ring-emerald-400' : ($count <= 3 ? 'ring-yellow-400' : 'ring-red-400');
+                @endphp
+                @if($count > 0)
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full {{ $badgeColor }} text-white text-xs font-bold animate-pulse">
+                        {{ $count }}
+                    </span>
+                @endif
+            </h2>
+            <!-- Status Klinik -->
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-slate-500">Status Klinik:</span>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                    <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
+                    <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
+                </div>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">

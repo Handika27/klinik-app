@@ -71,7 +71,15 @@
                         <span class="font-medium">Reservasi</span>
                     </a>
                     <a href="{{ route('announcements.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('announcements.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 110-6M16 13a5 5 0 110-10 5 5 0 010 10z"></path></svg>
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Megaphone (Toa) - bigger and clearer -->
+                            <path d="M3 11l18-5v10l-18-5z"></path>
+                            <path d="M11 19l-4-1"></path>
+                            <path d="M11 3l-4-1"></path>
+                            <!-- Gear (Roda Gerigi) - in bottom right, more prominent -->
+                            <circle cx="20" cy="20" r="3" stroke-width="2"></circle>
+                            <path d="M20 16v1M20 23v-1M16 20h1M23 20h-1M17 17l1 1M22 22l-1-1M17 22l1-1M22 17l-1 1" stroke-width="2"></path>
+                        </svg>
                         <span class="font-medium">Kelola Pengumuman</span>
                     </a>
                 @endif
@@ -179,7 +187,15 @@
                         <span class="font-medium">Reservasi</span>
                     </a>
                     <a href="{{ route('announcements.index') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('announcements.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 110-6M16 13a5 5 0 110-10 5 5 0 010 10z"></path></svg>
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <!-- Megaphone (Toa) - bigger and clearer -->
+                            <path d="M3 11l18-5v10l-18-5z"></path>
+                            <path d="M11 19l-4-1"></path>
+                            <path d="M11 3l-4-1"></path>
+                            <!-- Gear (Roda Gerigi) - in bottom right, more prominent -->
+                            <circle cx="20" cy="20" r="3" stroke-width="2"></circle>
+                            <path d="M20 16v1M20 23v-1M16 20h1M23 20h-1M17 17l1 1M22 22l-1-1M17 22l1-1M22 17l-1 1" stroke-width="2"></path>
+                        </svg>
                         <span class="font-medium">Kelola Pengumuman</span>
                     </a>
                 @endif
@@ -226,20 +242,22 @@
             
             <!-- Header dengan Menu Hamburger -->
             <header class="bg-white shadow-sm border-b border-slate-200 z-10">
-                <div class="py-5 px-6 sm:px-8 flex justify-between items-center">
-                    <button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
-                        <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                    </button>
-                    
-                    <div class="flex items-center gap-2">
-                        @if (isset($header))
-                            {{ $header }}
-                        @endif
+                <div class="py-5 px-6 sm:px-8 flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+                    <div class="flex items-center gap-3 flex-1">
+                        <button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+                            <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        
+                        <div class="flex-1">
+                            @if (isset($header))
+                                {{ $header }}
+                            @endif
+                        </div>
                     </div>
                     
-                    <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-4 justify-start sm:justify-end">
                         <span class="text-sm text-slate-500">{{ now()->format('l, d F Y') }}</span>
                     </div>
                 </div>
