@@ -73,4 +73,7 @@
         const today = new Date().toISOString().split('T')[0];
         dateInput.setAttribute('min', today);
     </script>
+
+    <!-- Tombol WhatsApp Floating -->
+    <x-whatsapp-button />
 </x-app-layout>

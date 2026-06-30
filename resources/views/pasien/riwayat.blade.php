@@ -42,4 +42,7 @@
             </div>
         </div>
     </div>
+
+    <!-- Tombol WhatsApp Floating -->
+    <x-whatsapp-button />
 </x-app-layout>

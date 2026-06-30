@@ -54,12 +54,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dokter/dashboard', [RekamMedisController::class, 'dashboard'])->name('dokter.dashboard');
 
     // Rute Pasien
-    Route::get('/pasien/dashboard', function() {
-        $announcements = \App\Models\Announcement::where('is_active', true)
-            ->orderBy('tanggal_rilis', 'desc')
-            ->get();
-        return view('pasien.dashboard', compact('announcements'));
-    })->name('pasien.dashboard');
+            // Rute Pasien
+Route::get('/pasien/dashboard', function() {
+    // 1. Ambil data pengumuman aktif
+    $activeAnnouncements = \App\Models\Announcement::where('is_active', true)
+                            ->orderBy('tanggal_rilis', 'desc')
+                            ->get();
+
+    // 2. Logika Status Klinik (Opsional, jika kamu sudah punya)
+    $clinicIsOpen = true; // Ganti dengan logic jadwalmu
+    $clinicOperationalMessage = "Klinik Sedang Buka";
+
+    // 3. Kirim data ke view
+    return view('pasien.dashboard', compact('activeAnnouncements', 'clinicIsOpen', 'clinicOperationalMessage'));
+})->name('pasien.dashboard');
 
     // Rute CRUD Jadwal Dokter dan Obat
     Route::resource('jadwal', JadwalDokterController::class);

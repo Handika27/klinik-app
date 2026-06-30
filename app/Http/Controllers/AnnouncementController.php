@@ -43,7 +43,7 @@ class AnnouncementController extends Controller
             Announcement::create([
                 'judul' => $request->judul,
                 'konten' => $request->konten,
-                'is_active' => $request->has('is_active'),
+                'is_active' => $request->has('is_active') ? 1 : 0,
                 'tanggal_rilis' => $request->tanggal_rilis ?? now(),
             ]);
 

@@ -30,7 +30,7 @@
                             </div>
 
                             <div class="flex items-center pt-6">
-                                <input type="checkbox" name="is_active" id="is_active" checked class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300">
+                                <input type="checkbox" name="is_active" id="is_active" value="1" checked class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-slate-300">
                                 <label for="is_active" class="ml-2 block text-sm font-medium text-slate-700">Pengumuman Aktif</label>
                             </div>
                         </div>

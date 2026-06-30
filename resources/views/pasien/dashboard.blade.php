@@ -1,16 +1,38 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Dashboard') }}
+            </h2>
+            <!-- Status Klinik -->
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-slate-500">Status Klinik:</span>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                    <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
+                    <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
+                </div>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
-            @if($announcements->count() > 0)
-                <div class="mb-6 space-y-4">
-                    @foreach($announcements as $announcement)
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6 text-gray-900">
+                    {{ __("Selamat Datang di Klinik") }}
+                    <div class="mt-6 flex flex-wrap gap-4">
+                        <a href="{{ route('pasien.jadwal') }}" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition duration-150">Lihat Jadwal Dokter &rarr;</a>
+                        <a href="{{ route('pasien.reservasi.index') }}" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded transition duration-150">Reservasi Saya &rarr;</a>
+                        <a href="{{ route('pasien.riwayat') }}" class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded transition duration-150">Riwayat Pemeriksaan &rarr;</a>
+                    </div>
+                </div>
+            </div>
+            
+            @if($activeAnnouncements->count() > 0)
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">📢 Pengumuman Terbaru</h3>
+                    @foreach($activeAnnouncements as $announcement)
                         <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-2xl shadow-lg overflow-hidden">
                             <div class="p-6">
                                 <div class="flex items-start gap-3">
@@ -32,19 +54,11 @@
                     @endforeach
                 </div>
             @endif
-            
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("Selamat Datang di Klinik") }}
-                    <div class="mt-6 flex flex-wrap gap-4">
-                        <a href="{{ route('pasien.jadwal') }}" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition duration-150">Lihat Jadwal Dokter &rarr;</a>
-                        <a href="{{ route('pasien.reservasi.index') }}" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded transition duration-150">Reservasi Saya &rarr;</a>
-                        <a href="{{ route('pasien.riwayat') }}" class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-2 px-4 rounded transition duration-150">Riwayat Pemeriksaan &rarr;</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
+
+    <!-- Tombol WhatsApp Floating -->
+    <x-whatsapp-button />
 
     <script>
         // Prevent accidental back button/swipe back only on this dashboard page
