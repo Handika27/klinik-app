@@ -112,12 +112,16 @@ class RekamMedisController extends Controller
                 'tindakan' => $request->tindakan,
             ]);
 
-            // Simpan resep jika ada
+            // Simpan resep jika ada dan hitung total biaya
+            $totalBiayaObat = 0;
             if ($request->has('obat_id') && is_array($request->obat_id)) {
                 foreach ($request->obat_id as $idx => $obatId) {
                     if (empty($obatId)) continue;
                     $jumlah = $request->jumlah[$idx] ?? 1;
                     $aturan = $request->aturan_pakai[$idx] ?? '';
+
+                    $obat = Obat::findOrFail($obatId);
+                    $totalBiayaObat += $jumlah * $obat->harga;
 
                     ResepObat::create([
                         'rekam_medis_id' => $rekam->id,
@@ -128,8 +132,15 @@ class RekamMedisController extends Controller
                 }
             }
 
-            // Tandai reservasi selesai
-            $reservasi->update(['status' => 'selesai']);
+            // Hitung total biaya: biaya penanganan + total biaya obat
+            $biayaPenanganan = 50000;
+            $totalBiaya = $biayaPenanganan + $totalBiayaObat;
+
+            // Tandai reservasi selesai dan simpan total biaya
+            $reservasi->update([
+                'status' => 'selesai',
+                'total_biaya' => $totalBiaya
+            ]);
 
             return redirect()->route('dokter.rekam.index')->with('success', 'Rekam medis dan resep berhasil disimpan!');
 
@@ -159,6 +170,9 @@ class RekamMedisController extends Controller
         $rekam = RekamMedis::with(['dokter', 'reservasi.jadwal', 'resepObats.obat'])
             ->where('pasien_id', auth()->user()->id)
             ->findOrFail($id);
+        
+        // Pengecekan status pembayaran
+        abort_if(optional($rekam->reservasi)->status_pembayaran !== 'lunas', 403, 'Anda hanya bisa melihat detail riwayat setelah pembayaran lunas.');
 
         return view('pasien.riwayat-detail', compact('rekam'));
     }

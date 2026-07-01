@@ -83,6 +83,7 @@ Route::get('/pasien/dashboard', function() {
     // Admin reservasi management
     Route::get('admin/reservasi', [ReservasiController::class, 'adminIndex'])->name('admin.reservasi.index');
     Route::post('admin/reservasi/{id}/status', [ReservasiController::class, 'updateStatus'])->name('admin.reservasi.updateStatus');
+    Route::post('admin/reservasi/{id}/bayar', [ReservasiController::class, 'markAsPaid'])->name('admin.reservasi.markAsPaid');
 
     // Dokter: lihat pasien hari ini yang sudah dikonfirmasi + isi rekam medis
     Route::get('dokter/pasien-hari-ini', [RekamMedisController::class, 'index'])->name('dokter.rekam.index');

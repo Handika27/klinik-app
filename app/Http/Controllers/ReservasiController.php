@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Reservasi;
 use App\Models\JadwalDokter;
+use App\Models\RekamMedis;
 
 class ReservasiController extends Controller
 {
@@ -86,7 +87,7 @@ class ReservasiController extends Controller
     {
         abort_if(auth()->user()->role !== 'admin', 403);
 
-        $reservasis = Reservasi::with(['pasien', 'jadwal'])->orderBy('tanggal_kunjungan', 'desc')->get();
+        $reservasis = Reservasi::with(['pasien', 'jadwal', 'rekamMedis.resepObats.obat'])->orderBy('tanggal_kunjungan', 'desc')->get();
         return view('admin.reservasi.index', compact('reservasis'));
     }
 
@@ -159,6 +160,29 @@ class ReservasiController extends Controller
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal memperbarui status: ' . $e->getMessage());
+        }
+    }
+
+    // Method untuk menandai reservasi sebagai lunas (admin only)
+    public function markAsPaid(Request $request, $id)
+    {
+        abort_if(auth()->user()->role !== 'admin', 403);
+
+        $request->validate([
+            'metode_pembayaran' => 'required|in:cash,qris',
+        ]);
+
+        try {
+            $reservasi = Reservasi::findOrFail($id);
+            
+            $reservasi->update([
+                'status_pembayaran' => 'lunas',
+                'metode_pembayaran' => $request->metode_pembayaran,
+            ]);
+
+            return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil ditandai lunas!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memperbarui status pembayaran: ' . $e->getMessage());
         }
     }
 }
