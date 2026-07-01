@@ -43,14 +43,14 @@
                     <div class="p-6 text-gray-900">
                         <div class="flex justify-between items-start mb-4">
                             <div>
-                                <h3 class="text-lg font-semibold text-slate-900 mb-2">Antrean Hari Ini</h3>
-                                <p class="text-sm text-slate-600">Daftar pasien yang perlu diperiksa hari ini.</p>
+                                <h3 class="text-lg font-semibold text-slate-900 mb-2">Antrean Pasien</h3>
+                                <p class="text-sm text-slate-600">Daftar pasien yang perlu Anda periksa hari ini.</p>
                             </div>
                             <span class="{{ $badgeLight }} text-xs font-bold px-2.5 py-0.5 rounded-full">
                                 {{ $count }} {{ $count === 1 ? 'pasien' : 'pasien' }}
                             </span>
                         </div>
-                        <a href="{{ route('dokter.rekam.index') }}" class="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded transition duration-150">
+                        <a href="{{ route('dokter.reservasi.index') }}" class="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded transition duration-150">
                             Lihat Antrean &rarr;
                         </a>
                     </div>
@@ -58,10 +58,10 @@
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
-                        <h3 class="text-lg font-semibold text-slate-900 mb-2">Semua Reservasi</h3>
-                        <p class="text-sm text-slate-600 mb-4">Kelola seluruh reservasi pasien terkait jadwal Anda.</p>
-                        <a href="{{ route('dokter.reservasi.index') }}" class="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150">
-                            Kelola Reservasi &rarr;
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2">Arsip Rekam Medis</h3>
+                        <p class="text-sm text-slate-600 mb-4">Lihat seluruh riwayat rekam medis pasien yang sudah selesai diperiksa.</p>
+                        <a href="{{ route('dokter.rekam.index') }}" class="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition duration-150">
+                            Lihat Arsip &rarr;
                         </a>
                     </div>
                 </div>
