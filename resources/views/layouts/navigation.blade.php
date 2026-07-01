@@ -34,7 +34,7 @@
                                 {{ __('Kelola Reservasi') }}
                             </x-nav-link>
                             <x-nav-link :href="route('dokter.rekam.index')" :active="request()->routeIs('dokter.rekam.*')">
-                                {{ __('Rekam Medis') }}
+                                {{ __('Arsip Pasien') }}
                             </x-nav-link>
                         @endif
                         @if(auth()->user() && auth()->user()->role === 'pasien')
@@ -122,7 +122,7 @@
                     {{ __('Kelola Reservasi') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dokter.rekam.index')" :active="request()->routeIs('dokter.rekam.*')">
-                    {{ __('Rekam Medis') }}
+                    {{ __('Arsip Pasien') }}
                 </x-responsive-nav-link>
             @endif
             @if(auth()->user() && auth()->user()->role === 'pasien')

@@ -11,26 +11,22 @@ use App\Models\JadwalDokter;
 
 class RekamMedisController extends Controller
 {
-    // Tampilkan daftar pasien yang statusnya dikonfirmasi untuk hari ini (dokter)
+    // Tampilkan Arsip Rekam Medis untuk dokter
     public function index()
     {
         abort_if(auth()->user()->role !== 'dokter', 403);
-        // Tampilkan semua reservasi yang terkait dengan jadwal milik dokter (semua status)
+        
         $dokterId = auth()->user()->id;
         $dokterName = auth()->user()->name;
+        
+        $arsip_medis = RekamMedis::whereHas('reservasi.jadwal', function($query) use ($dokterId, $dokterName) {
+            $query->where('user_id', $dokterId)->orWhere('nama_dokter', $dokterName);
+        })
+        ->with(['reservasi.pasien', 'resepObats.obat'])
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-        // Cari jadwal yang terkait dengan dokter melalui user_id atau nama_dokter
-        $jadwalIds = JadwalDokter::where(function($q) use ($dokterId, $dokterName) {
-            $q->where('user_id', $dokterId)->orWhere('nama_dokter', $dokterName);
-        })->pluck('id')->toArray();
-
-        $reservasis = Reservasi::with(['pasien', 'jadwal'])
-            ->whereIn('jadwal_id', $jadwalIds)
-            ->where('status', 'dikonfirmasi')
-            ->orderBy('tanggal_kunjungan', 'desc')
-            ->get();
-
-        return view('dokter.rekam.index', compact('reservasis'));
+        return view('dokter.rekam.index', compact('arsip_medis'));
     }
 
     // Halaman dashboard dokter menampilkan antrean pasien yang sudah disetujui hari ini
@@ -77,8 +73,16 @@ class RekamMedisController extends Controller
             abort(403);
         }
 
+        // Ambil riwayat medis pasien sebelumnya (tidak termasuk reservasi saat ini)
+        $riwayat_medis = RekamMedis::whereHas('reservasi', function($query) use ($reservasi) {
+            $query->where('pasien_id', $reservasi->pasien_id);
+        })->where('reservasi_id', '!=', $reservasi->id)
+          ->with(['reservasi.jadwal.user', 'dokter', 'resepObats.obat'])
+          ->orderBy('created_at', 'desc')
+          ->get();
+
         $obats = Obat::all();
-        return view('dokter.rekam.create', compact('reservasi', 'obats'));
+        return view('dokter.rekam.create', compact('reservasi', 'obats', 'riwayat_medis'));
     }
 
     public function store(Request $request)
