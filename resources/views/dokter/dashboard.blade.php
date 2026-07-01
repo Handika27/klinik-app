@@ -1,14 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <!-- Logo App + Badge Antrean -->
         <div class="flex items-center gap-3">
-            <div class="flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
-                     <div class="w-2.5 h-2.5 rounded-full bg-white opacity-80"></div>
-                </div>
-                <span class="text-lg font-bold tracking-tight">Klinik <span class="font-normal text-emerald-600">Medika</span></span>
-            </div>
-            
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard Dokter</h2>
             @php
                 $count = $reservasis->count();
                 $badgeColor = $count === 0 ? 'bg-emerald-500' : ($count <= 3 ? 'bg-yellow-500' : 'bg-red-500');

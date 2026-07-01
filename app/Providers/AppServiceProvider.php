@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
                 ->get();
                 
             // Nomor WhatsApp CS
-            $waNumber = '628123456789';
+            $waNumber = '6288225397331';
             
             $view->with([
                 'clinicIsOpen' => $isOpen,

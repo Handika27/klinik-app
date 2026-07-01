@@ -71,24 +71,14 @@
                         <span class="font-medium">Reservasi</span>
                     </a>
                     <a href="{{ route('announcements.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('announcements.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Megaphone (Toa) - bigger and clearer -->
-                            <path d="M3 11l18-5v10l-18-5z"></path>
-                            <path d="M11 19l-4-1"></path>
-                            <path d="M11 3l-4-1"></path>
-                            <!-- Gear (Roda Gerigi) - in bottom right, more prominent -->
-                            <circle cx="20" cy="20" r="3" stroke-width="2"></circle>
-                            <path d="M20 16v1M20 23v-1M16 20h1M23 20h-1M17 17l1 1M22 22l-1-1M17 22l1-1M22 17l-1 1" stroke-width="2"></path>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
                         </svg>
                         <span class="font-medium">Kelola Pengumuman</span>
                     </a>
                 @endif
 
                 @if(auth()->user() && auth()->user()->role === 'dokter')
-                    <a href="{{ route('dokter.reservasi.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('dokter.reservasi.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        <span class="font-medium">Kelola Reservasi</span>
-                    </a>
                     @php
                         // Hitung jumlah antrean untuk sidebar
                         $dokterId = auth()->user()->id;
@@ -182,14 +172,8 @@
                         <span class="font-medium">Reservasi</span>
                     </a>
                     <a href="{{ route('announcements.index') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('announcements.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <!-- Megaphone (Toa) - bigger and clearer -->
-                            <path d="M3 11l18-5v10l-18-5z"></path>
-                            <path d="M11 19l-4-1"></path>
-                            <path d="M11 3l-4-1"></path>
-                            <!-- Gear (Roda Gerigi) - in bottom right, more prominent -->
-                            <circle cx="20" cy="20" r="3" stroke-width="2"></circle>
-                            <path d="M20 16v1M20 23v-1M16 20h1M23 20h-1M17 17l1 1M22 22l-1-1M17 22l1-1M22 17l-1 1" stroke-width="2"></path>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
                         </svg>
                         <span class="font-medium">Kelola Pengumuman</span>
                     </a>
@@ -232,46 +216,69 @@
             
             <!-- Header dengan Menu Hamburger -->
             <header class="bg-white shadow-sm border-b border-slate-200 z-10">
-                <div class="flex items-center justify-between w-full h-14 px-4 overflow-hidden">
-                    <!-- Kiri: Hamburger & Header -->
-                    <div class="flex items-center gap-2">
-                        <button onclick="toggleMobileSidebar()" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
-                            <svg class="w-6 h-6 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                @php
+                    $c_status = Cache::get('clinic_status', 'buka');
+                    $s1_open = Cache::get('shift1_open', '08:00');
+                    $s1_close = Cache::get('shift1_close', '12:00');
+                    $s2_open = Cache::get('shift2_open', '14:00');
+                    $s2_close = Cache::get('shift2_close', '20:00');
+                @endphp
+
+                <!-- Baris 1: Hamburger + Logo (mobile) / Hamburger + Title + Status (desktop) -->
+                <div class="flex items-center justify-between w-full h-14 px-4">
+                    <!-- Kiri: Hamburger & Judul Halaman -->
+                    <div class="flex items-center gap-2 min-w-0">
+                        <button onclick="toggleMobileSidebar()" class="md:hidden flex-shrink-0 p-2 rounded-lg hover:bg-slate-100">
+                            <svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
                         </button>
-                        
-                        @if(isset($header))
-                            {{ $header }}
+
+                        <!-- Logo teks hanya di mobile, agar ada identitas -->
+                        <span class="md:hidden text-base font-bold tracking-tight">Klinik <span class="font-normal text-emerald-600">Medika</span></span>
+
+                        <!-- Judul halaman (slot $header) hanya di desktop -->
+                        <div class="hidden md:block">
+                            @if(isset($header))
+                                {{ $header }}
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Kanan: Status Klinik -->
+                    <div class="flex items-center">
+                        @if($c_status == 'buka')
+                            <!-- Mobile: singkat -->
+                            <span class="md:hidden inline-flex items-center gap-1.5 text-xs font-medium text-green-700">
+                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0"></span>
+                                Buka
+                            </span>
+                            <!-- Desktop: lengkap -->
+                            <span class="hidden md:inline-flex items-center gap-1.5 text-xs font-medium text-green-700 whitespace-nowrap">
+                                <span class="w-2 h-2 rounded-full bg-green-500 inline-block flex-shrink-0"></span>
+                                Buka ({{ $s1_open }}-{{ $s1_close }} & {{ $s2_open }}-{{ $s2_close }} WIB)
+                            </span>
+                        @else
+                            <!-- Mobile: singkat -->
+                            <span class="md:hidden inline-flex items-center gap-1.5 text-xs font-medium text-red-600">
+                                <span class="w-2 h-2 rounded-full bg-red-500 inline-block flex-shrink-0"></span>
+                                Tutup
+                            </span>
+                            <!-- Desktop: lengkap -->
+                            <span class="hidden md:inline-flex items-center gap-1.5 text-xs font-medium text-red-600 whitespace-nowrap">
+                                <span class="w-2 h-2 rounded-full bg-red-500 inline-block flex-shrink-0"></span>
+                                Tutup – Buka pukul {{ $s1_open }} WIB
+                            </span>
                         @endif
                     </div>
-                    
-                    <!-- Kanan: Status Klinik & Tanggal -->
-                    <div class="flex items-center gap-2 sm:gap-4">
-                        <!-- Badge Status Klinik -->
-                    @php
-                        $c_status = Cache::get('clinic_status', 'buka');
-                        $s1_open = Cache::get('shift1_open', '08:00');
-                        $s1_close = Cache::get('shift1_close', '12:00');
-                        $s2_open = Cache::get('shift2_open', '14:00');
-                        $s2_close = Cache::get('shift2_close', '20:00');
-                    @endphp
-                    @if($c_status == 'buka')
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-green-100 text-green-800">
-                            <svg class="w-4 h-4 mr-1.5 text-green-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
-                            Buka ({{ $s1_open }}-{{ $s1_close }} & {{ $s2_open }}-{{ $s2_close }} WIB)
-                        </span>
-                    @else
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-red-100 text-red-800">
-                            <svg class="w-4 h-4 mr-1.5 text-red-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
-                            Tutup - Buka kembali pukul {{ $s1_open }} WIB
-                        </span>
-                    @endif
-                        
-                        <!-- Tanggal - Hidden di Mobile -->
-                        <span class="hidden sm:block text-xs sm:text-sm text-gray-500 whitespace-nowrap">{{ now()->format('l, d F Y') }}</span>
-                    </div>
                 </div>
+
+                <!-- Baris 2 (mobile only): Judul halaman -->
+                @if(isset($header))
+                    <div class="md:hidden px-4 pb-2">
+                        {{ $header }}
+                    </div>
+                @endif
             </header>
 
             <main class="flex-1 overflow-y-auto bg-slate-50 p-6 md:p-8">
@@ -405,6 +412,41 @@
                 });
             });
         });
+
+        // Auto-dismiss semua alert session (success, error, warning, info)
+        (function() {
+            const alertSelectors = [
+                '.bg-emerald-100.border-l-4',
+                '.bg-red-100.border-l-4',
+                '.bg-yellow-100.border-l-4',
+                '.bg-blue-100.border-l-4',
+                '.bg-green-100.border-l-4',
+                '#alert-success',
+                '#alert-error',
+            ];
+
+            const alerts = document.querySelectorAll(alertSelectors.join(', '));
+
+            alerts.forEach(function(alert) {
+                // Pastikan ada transisi CSS untuk fade
+                alert.style.transition = 'opacity 0.5s ease, max-height 0.5s ease, margin 0.5s ease, padding 0.5s ease';
+                alert.style.overflow = 'hidden';
+
+                // Mulai hilang setelah 3 detik
+                setTimeout(function() {
+                    alert.style.opacity = '0';
+                    alert.style.maxHeight = '0';
+                    alert.style.marginBottom = '0';
+                    alert.style.paddingTop = '0';
+                    alert.style.paddingBottom = '0';
+
+                    // Hapus dari DOM setelah animasi selesai
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }, 3000);
+            });
+        })();
     </script>
 </body>
 </html>

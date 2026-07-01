@@ -1,12 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <!-- Logo App -->
-        <div class="flex items-center gap-2">
-            <div class="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
-                 <div class="w-2.5 h-2.5 rounded-full bg-white opacity-80"></div>
-            </div>
-            <span class="text-lg font-bold tracking-tight">Klinik <span class="font-normal text-emerald-600">Medika</span></span>
-        </div>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Dashboard
+        </h2>
     </x-slot>
 
     <div class="py-12">
@@ -32,7 +28,7 @@
                                 <div class="flex items-start gap-3">
                                     <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
                                         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 110-6M16 13a5 5 0 110-10 5 5 0 010 10z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
