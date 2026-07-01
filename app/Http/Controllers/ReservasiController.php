@@ -14,7 +14,7 @@ class ReservasiController extends Controller
     {
         abort_if(auth()->user()->role !== 'pasien', 403);
 
-        $jadwals = JadwalDokter::all();
+        $jadwals = JadwalDokter::with('user')->orderBy('jam_mulai')->get();
         return view('pasien.jadwal', compact('jadwals'));
     }
 
@@ -175,10 +175,24 @@ class ReservasiController extends Controller
         try {
             $reservasi = Reservasi::findOrFail($id);
             
-            $reservasi->update([
-                'status_pembayaran' => 'lunas',
-                'metode_pembayaran' => $request->metode_pembayaran,
-            ]);
+            // Hanya ubah jika status belum lunas
+            if ($reservasi->status_pembayaran !== 'lunas') {
+                $reservasi->status_pembayaran = 'lunas';
+                $reservasi->metode_pembayaran = $request->metode_pembayaran;
+                $reservasi->save();
+                
+                // Kurangi stok obat berdasarkan resep
+                $rekamMedis = $reservasi->rekamMedis;
+                if ($rekamMedis && $rekamMedis->resepObats) {
+                    foreach ($rekamMedis->resepObats as $resep) {
+                        $obat = \App\Models\Obat::find($resep->obat_id);
+                        if ($obat) {
+                            $obat->stok -= $resep->jumlah;
+                            $obat->save();
+                        }
+                    }
+                }
+            }
 
             return redirect()->route('admin.reservasi.index')->with('success', 'Reservasi berhasil ditandai lunas!');
         } catch (\Exception $e) {

@@ -15,6 +15,7 @@ class JadwalDokter extends Model
         'hari',
         'jam_mulai',
         'jam_selesai',
+        'status',
     ];
 
     // Membuat jembatan relasi ke tabel User

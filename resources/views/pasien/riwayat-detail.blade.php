@@ -51,29 +51,104 @@
                     </div>
                     @endif
 
-                    <!-- Resep Obat -->
-                    @if($rekam->resepObats && $rekam->resepObats->count() > 0)
-                    <div class="mb-6">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Resep Obat</h3>
-                        <div class="border rounded-lg overflow-hidden">
-                            <table class="w-full text-left border-collapse">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="p-3 font-semibold text-gray-700 text-sm">Nama Obat</th>
-                                        <th class="p-3 font-semibold text-gray-700 text-sm">Jumlah</th>
-                                        <th class="p-3 font-semibold text-gray-700 text-sm">Aturan Pakai</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-                                    @foreach($rekam->resepObats as $resep)
-                                    <tr>
-                                        <td class="p-3 text-sm">{{ optional($resep->obat)->nama_obat ?? 'Obat tidak ditemukan' }}</td>
-                                        <td class="p-3 text-sm">{{ $resep->jumlah }}</td>
-                                        <td class="p-3 text-sm">{{ $resep->aturan_pakai }}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                    <!-- Struk Pembayaran -->
+                    @if(optional($rekam->reservasi)->status_pembayaran === 'lunas')
+                    <div class="mt-8 pt-6 border-t">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Struk Pembayaran</h3>
+                        
+                        <!-- Badge Status -->
+                        <div class="mb-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
+                                LUNAS
+                            </span>
+                        </div>
+
+                        <!-- Resep Obat -->
+                        @if($rekam->resepObats && $rekam->resepObats->count() > 0)
+                        <div class="mb-4">
+                            <h4 class="font-semibold text-gray-700 mb-2">Rincian Obat</h4>
+                            <div class="border rounded-lg overflow-hidden overflow-x-auto">
+                                @php 
+                                    $totalObat = 0; 
+                                    $jasaDokter = 50000; 
+                                @endphp
+                                <table class="w-full text-left border-collapse">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="p-3 font-semibold text-gray-700 text-sm">Nama Obat</th>
+                                            <th class="p-3 font-semibold text-gray-700 text-sm">Aturan Pakai</th>
+                                            <th class="p-3 font-semibold text-gray-700 text-sm">Jumlah</th>
+                                            <th class="p-3 font-semibold text-gray-700 text-sm">Harga Satuan</th>
+                                            <th class="p-3 font-semibold text-gray-700 text-sm">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-200">
+                                        @foreach($rekam->resepObats as $resep)
+                                            @php 
+                                                $subtotal = (optional($resep->obat)->harga ?? 0) * $resep->jumlah;
+                                                $totalObat += $subtotal;
+                                            @endphp
+                                        <tr>
+                                            <td class="p-3 text-sm">{{ optional($resep->obat)->nama_obat ?? 'Obat tidak ditemukan' }}</td>
+                                            <td class="p-3 text-sm">{{ $resep->aturan_pakai ?? '-' }}</td>
+                                            <td class="p-3 text-sm">{{ $resep->jumlah }}</td>
+                                            <td class="p-3 text-sm">Rp {{ number_format(optional($resep->obat)->harga ?? 0, 0, ',', '.') }}</td>
+                                            <td class="p-3 text-sm">Rp {{ number_format($subtotal, 0, ',', '.') }}</td>
+                                        </tr>
+                                        @endforeach
+                                        <!-- Biaya Penanganan -->
+                                        <tr class="border-t-2 border-gray-300">
+                                            <td colspan="4" class="p-3 text-sm font-medium text-gray-700">Biaya Penanganan (Jasa Dokter)</td>
+                                            <td class="p-3 text-sm font-medium text-gray-700">Rp {{ number_format($jasaDokter, 0, ',', '.') }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <!-- Grand Total -->
+                                        <tr class="bg-gray-100">
+                                            <td colspan="4" class="p-4 text-lg font-bold text-gray-800">Grand Total Pembayaran</td>
+                                            <td class="p-4 text-lg font-extrabold text-indigo-700">
+                                                Rp {{ number_format($totalObat + $jasaDokter, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        @else
+                            <!-- Jika tidak ada resep obat -->
+                            @php $jasaDokter = 50000; @endphp
+                            <div class="border rounded-lg p-4 mb-4">
+                                <table class="w-full">
+                                    <tbody>
+                                        <tr class="border-b">
+                                            <td class="py-2 font-medium text-gray-700">Biaya Penanganan (Jasa Dokter)</td>
+                                            <td class="py-2 text-right text-gray-700">Rp {{ number_format($jasaDokter, 0, ',', '.') }}</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="bg-gray-100">
+                                            <td class="p-4 text-lg font-bold text-gray-800">Grand Total Pembayaran</td>
+                                            <td class="p-4 text-right text-lg font-extrabold text-indigo-700">
+                                                Rp {{ number_format($jasaDokter, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        @endif
+
+                    </div>
+                    @else
+                    <!-- Peringatan Belum Lunas -->
+                    <div class="mt-8 pt-6 border-t">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-orange-100 text-orange-800">
+                                BELUM LUNAS - Silakan bayar di kasir
+                            </span>
+                        </div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
+                            <p class="font-medium">Pembayaran belum lunas</p>
+                            <p class="text-sm mt-1">Silakan selesaikan pembayaran di kasir klinik untuk melihat rincian pembayaran lengkap.</p>
                         </div>
                     </div>
                     @endif

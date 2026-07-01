@@ -42,7 +42,7 @@
                 @if(auth()->user() && auth()->user()->role === 'pasien')
                     <a href="{{ route('pasien.jadwal') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.jadwal') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <span class="font-medium">Jadwal Dokter</span>
+                        <span class="font-medium">Buat Reservasi</span>
                     </a>
                     <a href="{{ route('pasien.reservasi.index') }}" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.reservasi.index') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14v4m0 0v4m0-4h4m-4 0h-4"></path></svg>
@@ -158,7 +158,7 @@
                 @if(auth()->user() && auth()->user()->role === 'pasien')
                     <a href="{{ route('pasien.jadwal') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.jadwal') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <span class="font-medium">Jadwal Dokter</span>
+                        <span class="font-medium">Buat Reservasi</span>
                     </a>
                     <a href="{{ route('pasien.reservasi.index') }}" onclick="toggleMobileSidebar()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('pasien.reservasi.index') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} transition-colors">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14v4m0 0v4m0-4h4m-4 0h-4"></path></svg>
@@ -259,10 +259,24 @@
                     <!-- Kanan: Status Klinik & Tanggal -->
                     <div class="flex items-center gap-2 sm:gap-4">
                         <!-- Badge Status Klinik -->
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                            <span class="w-1.5 h-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
-                            <span>{{ $clinicOperationalMessage }}</span>
-                        </div>
+                    @php
+                        $c_status = Cache::get('clinic_status', 'buka');
+                        $s1_open = Cache::get('shift1_open', '08:00');
+                        $s1_close = Cache::get('shift1_close', '12:00');
+                        $s2_open = Cache::get('shift2_open', '14:00');
+                        $s2_close = Cache::get('shift2_close', '20:00');
+                    @endphp
+                    @if($c_status == 'buka')
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-green-100 text-green-800">
+                            <svg class="w-4 h-4 mr-1.5 text-green-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
+                            Buka ({{ $s1_open }}-{{ $s1_close }} & {{ $s2_open }}-{{ $s2_close }} WIB)
+                        </span>
+                    @else
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full whitespace-nowrap bg-red-100 text-red-800">
+                            <svg class="w-4 h-4 mr-1.5 text-red-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
+                            Tutup - Buka kembali pukul {{ $s1_open }} WIB
+                        </span>
+                    @endif
                         
                         <!-- Tanggal - Hidden di Mobile -->
                         <span class="hidden sm:block text-xs sm:text-sm text-gray-500 whitespace-nowrap">{{ now()->format('l, d F Y') }}</span>

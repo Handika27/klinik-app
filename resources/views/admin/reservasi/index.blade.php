@@ -9,13 +9,13 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if(session('success'))
-                <div class="mb-4 bg-emerald-100 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded shadow-sm">
+                <div id="alert-success" class="mb-4 bg-emerald-100 border-l-4 border-emerald-500 text-emerald-800 p-4 rounded shadow-sm transition-all duration-500 ease-in-out">
                     <p class="font-medium">{{ session('success') }}</p>
                 </div>
             @endif
 
             @if(session('error'))
-                <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded shadow-sm">
+                <div id="alert-error" class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-800 p-4 rounded shadow-sm transition-all duration-500 ease-in-out">
                     <p class="font-medium">{{ session('error') }}</p>
                 </div>
             @endif
@@ -48,7 +48,29 @@
                                         <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : ($r->status == 'dikonfirmasi' ? 'bg-emerald-100 text-emerald-800' : ($r->status == 'selesai' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800')) }}">{{ $r->status == 'pending' ? 'Menunggu' : ($r->status == 'dikonfirmasi' ? 'Disetujui' : ($r->status == 'selesai' ? 'Selesai' : 'Batal')) }}</span>
                                     </td>
                                     <td class="p-4 text-slate-600">
-                                        {{ $r->total_biaya ? 'Rp ' . number_format($r->total_biaya, 0, ',', '.') : '—' }}
+                                        @if($r->status == 'pending' || $r->status == 'dikonfirmasi' || $r->status == 'menunggu')
+                                            <span class="text-xs text-gray-500 italic">Menunggu Pemeriksaan</span>
+                                        @elseif($r->status == 'batal')
+                                            <span class="text-xs text-red-500 italic">Dibatalkan</span>
+                                        @else
+                                            @php
+                                                // Gunakan nominal dari database jika ada
+                                                $total = $r->total_biaya;
+
+                                                // Fallback Kalkulator untuk data lama yang total_biaya nya masih null
+                                                if (!$total && $r->rekamMedis) {
+                                                    $total = 50000; // Base price jasa dokter
+                                                    foreach($r->rekamMedis->resepObats as $resep) {
+                                                        if($resep->obat) {
+                                                            $total += ($resep->obat->harga * $resep->jumlah);
+                                                        }
+                                                    }
+                                                }
+                                            @endphp
+                                            <span class="font-medium text-gray-800">
+                                                Rp {{ number_format($total ?? 0, 0, ',', '.') }}
+                                            </span>
+                                        @endif
                                     </td>
                                     <td class="p-4 text-slate-600">
                                         <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status_pembayaran == 'lunas' ? 'bg-green-100 text-green-800' : 'bg-orange-100 text-orange-800' }}">
@@ -57,23 +79,34 @@
                                     </td>
                                     <td class="p-4">
                                         <div class="space-y-2">
-                                            <form action="{{ auth()->user()->role === 'admin' ? route('admin.reservasi.updateStatus', $r->id) : route('dokter.reservasi.updateStatus', $r->id) }}" method="POST" class="inline-block">
-                                                @csrf
-                                                <select name="status" class="border-gray-300 rounded-md mr-2">
-                                                    <option value="pending" {{ $r->status=='pending' ? 'selected' : '' }}>Pending</option>
-                                                    <option value="dikonfirmasi" {{ $r->status=='dikonfirmasi' ? 'selected' : '' }}>Setujui</option>
-                                                    <option value="selesai" {{ $r->status=='selesai' ? 'selected' : '' }}>Selesai</option>
-                                                    <option value="batal" {{ $r->status=='batal' ? 'selected' : '' }}>Tolak</option>
-                                                </select>
-                                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded">Simpan</button>
-                                            </form>
-                                            @if(auth()->user()->role === 'dokter' && $r->status === 'dikonfirmasi')
-                                                <a href="{{ route('dokter.rekam.create', $r->id) }}" class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded">Isi Rekam</a>
-                                            @endif
-                                            @if(auth()->user()->role === 'admin' && $r->status === 'selesai' && $r->status_pembayaran === 'belum')
-                                                <button type="button" onclick="openPaymentModal({{ $r->id }})" class="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded">
-                                                    Proses Pembayaran
-                                                </button>
+                                            @if(auth()->user()->role === 'admin')
+                                                @if($r->status === 'pending')
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 whitespace-nowrap">
+                                                        Menunggu
+                                                    </span>
+                                                @elseif($r->status === 'selesai' && $r->status_pembayaran === 'belum')
+                                                    <button type="button" onclick="openPaymentModal({{ $r->id }})" class="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded text-sm">
+                                                        Proses Pembayaran
+                                                    </button>
+                                                @elseif($r->status_pembayaran === 'lunas')
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 whitespace-nowrap">
+                                                        Lunas ({{ ucfirst($r->metode_pembayaran) }})
+                                                    </span>
+                                                @endif
+                                            @elseif(auth()->user()->role === 'dokter')
+                                                @if($r->status == 'pending' || $r->status == 'menunggu')
+                                                    <a href="{{ route('dokter.rekam.create', $r->id) }}" class="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors">
+                                                        Proses
+                                                    </a>
+                                                @elseif($r->status == 'dikonfirmasi')
+                                                    <a href="{{ route('dokter.rekam.create', $r->id) }}" class="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1 px-3 rounded text-sm animate-pulse">
+                                                        Input Rekam Medis
+                                                    </a>
+                                                @elseif($r->status == 'selesai')
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 whitespace-nowrap">
+                                                        Selesai Diperiksa
+                                                    </span>
+                                                @endif
                                             @endif
                                         </div>
                                     </td>
@@ -112,6 +145,21 @@
     </div>
 
     <script>
+        // Auto-hide alerts after 4 seconds with fade out
+        document.addEventListener('DOMContentLoaded', function() {
+            ['alert-success', 'alert-error'].forEach(function(alertId) {
+                const alertEl = document.getElementById(alertId);
+                if (alertEl) {
+                    setTimeout(() => {
+                        alertEl.classList.add('opacity-0', 'scale-95');
+                        setTimeout(() => {
+                            alertEl.style.display = 'none';
+                        }, 500);
+                    }, 4000);
+                }
+            });
+        });
+
         const reservasis = @json($reservasis);
 
         function openPaymentModal(reservasiId) {

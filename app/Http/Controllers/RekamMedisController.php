@@ -73,7 +73,7 @@ class RekamMedisController extends Controller
             $isOwner = ($reservasi->jadwal->user_id === $dokterId) || ($reservasi->jadwal->nama_dokter === auth()->user()->name);
         }
 
-        if (! $isOwner || $reservasi->status !== 'dikonfirmasi') {
+        if (! $isOwner || !in_array($reservasi->status, ['pending', 'dikonfirmasi'])) {
             abort(403);
         }
 
@@ -100,7 +100,7 @@ class RekamMedisController extends Controller
                 $isOwner = ($reservasi->jadwal->user_id === $dokterId) || ($reservasi->jadwal->nama_dokter === auth()->user()->name);
             }
 
-            if (! $isOwner || $reservasi->status !== 'dikonfirmasi') {
+            if (! $isOwner || !in_array($reservasi->status, ['pending', 'dikonfirmasi'])) {
                 abort(403);
             }
 

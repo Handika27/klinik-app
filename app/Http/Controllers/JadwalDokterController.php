@@ -172,4 +172,22 @@ class JadwalDokterController extends Controller
             return redirect()->route('jadwal.index')->with('error', 'Gagal melakukan sinkronisasi: ' . $e->getMessage());
         }
     }
+    
+    // Toggle status jadwal antara aktif dan cuti
+    public function toggleStatus($id)
+    {
+        if (!in_array(auth()->user()->role, ['admin'])) {
+            abort(403);
+        }
+        
+        try {
+            $jadwal = JadwalDokter::findOrFail($id);
+            $jadwal->status = $jadwal->status === 'aktif' ? 'cuti' : 'aktif';
+            $jadwal->save();
+            
+            return redirect()->route('jadwal.index')->with('success', "Status jadwal berhasil diubah menjadi {$jadwal->status}!");
+        } catch (\Exception $e) {
+            return redirect()->route('jadwal.index')->with('error', 'Gagal mengubah status: ' . $e->getMessage());
+        }
+    }
 }

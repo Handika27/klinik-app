@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="scroll-smooth">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,6 +14,13 @@
 
     <!-- Sticky Navbar -->
     <nav class="sticky top-0 z-50 w-full bg-white shadow-sm py-3 px-6 md:px-12">
+        @php
+            $c_status = Cache::get('clinic_status', 'buka');
+            $s1_open = Cache::get('shift1_open', '08:00');
+            $s1_close = Cache::get('shift1_close', '12:00');
+            $s2_open = Cache::get('shift2_open', '14:00');
+            $s2_close = Cache::get('shift2_close', '20:00');
+        @endphp
         <!-- Mobile Layout: 2 Rows -->
         <div class="md:hidden">
             <!-- Top Row: Logo + Auth Buttons -->
@@ -49,10 +56,17 @@
             <!-- Bottom Row: Status Klinik (Center) -->
             <div class="flex items-center justify-center gap-2">
                 <span class="text-sm text-slate-500">Status Klinik:</span>
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                    <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
-                    <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
-                </div>
+                @if($c_status == 'buka')
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 whitespace-nowrap">
+                        <svg class="w-4 h-4 mr-1.5 text-green-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
+                        Buka ({{ $s1_open }}-{{ $s1_close }} & {{ $s2_open }}-{{ $s2_close }} WIB)
+                    </span>
+                @else
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 whitespace-nowrap">
+                        <svg class="w-4 h-4 mr-1.5 text-red-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
+                        Tutup - Buka kembali pukul {{ $s1_open }} WIB
+                    </span>
+                @endif
             </div>
         </div>
 
@@ -69,10 +83,17 @@
             <!-- Center: Status Klinik -->
             <div class="flex items-center gap-2">
                 <span class="text-sm text-slate-500">Status Klinik:</span>
-                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full {{ $clinicIsOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                    <span class="w-2 h-2 rounded-full {{ $clinicIsOpen ? 'bg-green-500 animate-pulse' : 'bg-red-500' }}"></span>
-                    <span class="text-sm font-semibold">{{ $clinicOperationalMessage }}</span>
-                </div>
+                @if($c_status == 'buka')
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 whitespace-nowrap">
+                        <svg class="w-4 h-4 mr-1.5 text-green-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
+                        Buka ({{ $s1_open }}-{{ $s1_close }} & {{ $s2_open }}-{{ $s2_close }} WIB)
+                    </span>
+                @else
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800 whitespace-nowrap">
+                        <svg class="w-4 h-4 mr-1.5 text-red-500 fill-current" viewBox="0 0 20 20"><circle cx="10" cy="10" r="3"/></svg>
+                        Tutup - Buka kembali pukul {{ $s1_open }} WIB
+                    </span>
+                @endif
             </div>
 
             <!-- Right: Auth Buttons -->
@@ -122,8 +143,8 @@
                     <a href="{{ route('login') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition duration-200">
                         Mulai Sekarang
                     </a>
-                    <a href="#fitur" class="bg-white hover:bg-slate-100 text-slate-700 font-bold py-3 px-8 rounded-xl shadow border border-slate-200 transition duration-200">
-                        Pelajari Fitur
+                    <a href="#jadwal-operasional" class="bg-white hover:bg-slate-100 text-slate-700 font-bold py-3 px-8 rounded-xl shadow border border-slate-200 transition duration-200">
+                        Lihat Jadwal
                     </a>
                 </div>
             </div>
@@ -145,7 +166,7 @@
 
         <!-- Pengumuman -->
         @if($activeAnnouncements->count() > 0)
-            <div class="space-y-4">
+            <div class="space-y-4 mb-16">
                 <h2 class="text-2xl font-bold text-slate-800 mb-6">📢 Pengumuman Terbaru</h2>
                 @foreach($activeAnnouncements as $announcement)
                     <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-2xl shadow-lg overflow-hidden">
@@ -169,6 +190,115 @@
                 @endforeach
             </div>
         @endif
+
+        <!-- Jadwal Operasional Dokter -->
+        <div id="jadwal-operasional" class="mb-16 pt-20">
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">🗓️ Jadwal Operasional Dokter</h2>
+            <div class="overflow-x-auto bg-white rounded-lg shadow mb-8">
+                @php
+                    $hari_list = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+                    $grouped_jadwal = $jadwals->groupBy('hari');
+                @endphp
+
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-indigo-600 text-white">
+                            <th class="py-3 px-4 font-semibold text-sm border-b border-indigo-700">Hari & Waktu</th>
+                            <th class="py-3 px-4 font-semibold text-sm border-b border-indigo-700">Nama Dokter</th>
+                            <th class="py-3 px-4 font-semibold text-sm border-b border-indigo-700">Jam Praktik</th>
+                            <th class="py-3 px-4 font-semibold text-sm border-b border-indigo-700 text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @foreach($hari_list as $hari)
+                            @if(isset($grouped_jadwal[$hari]) && $grouped_jadwal[$hari]->count() > 0)
+                                @php
+                                    $jadwal_hari_ini = $grouped_jadwal[$hari];
+                                    // Shift 1 (Pagi/Siang): Mulai sebelum jam 13:00
+                                    $shift_pagi = $jadwal_hari_ini->filter(fn($j) => $j->jam_mulai < '13:00:00')->values();
+                                    // Shift 2 (Sore/Malam): Mulai dari jam 13:00 ke atas
+                                    $shift_sore = $jadwal_hari_ini->filter(fn($j) => $j->jam_mulai >= '13:00:00')->values();
+                                @endphp
+
+                                @if($shift_pagi->count() > 0)
+                                    @foreach($shift_pagi as $index => $jadwal)
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            @if($index == 0)
+                                                <td class="py-3 px-4 font-medium text-gray-900 align-top bg-indigo-50/50 border-r border-gray-200" rowspan="{{ $shift_pagi->count() }}">
+                                                    <div class="text-base text-indigo-700 font-bold uppercase tracking-wide">{{ $hari }}</div>
+                                                    <div class="text-xs text-gray-500 mt-1">Shift Pagi</div>
+                                                </td>
+                                            @endif
+                                            <td class="py-3 px-4">
+                                                <div class="font-medium text-gray-800">{{ $jadwal->user->name ?? ($jadwal->nama_dokter ?? 'Dokter') }}</div>
+                                                @if($jadwal->status === 'cuti')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 whitespace-nowrap mt-1">
+                                                        Cuti
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 whitespace-nowrap mt-1">
+                                                        Aktif
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="py-3 px-4 text-sm text-gray-600 font-medium">
+                                                {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }} WIB
+                                            </td>
+                                            <td class="py-3 px-4 text-center">
+                                                @if($jadwal->status == 'aktif')
+                                                    <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-md shadow-sm transition-colors" title="Login untuk Booking">
+                                                        Booking
+                                                    </a>
+                                                @else
+                                                    <button disabled class="inline-flex items-center px-4 py-1.5 bg-red-100 text-red-700 text-sm font-semibold rounded-md cursor-not-allowed">Cuti / Penuh</button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+
+                                @if($shift_sore->count() > 0)
+                                    @foreach($shift_sore as $index => $jadwal)
+                                        <tr class="hover:bg-gray-50 transition-colors">
+                                            @if($index == 0)
+                                                <td class="py-3 px-4 font-medium text-gray-900 align-top bg-emerald-50/50 border-r border-gray-200" rowspan="{{ $shift_sore->count() }}">
+                                                    <div class="text-base text-emerald-700 font-bold uppercase tracking-wide">{{ $hari }}</div>
+                                                    <div class="text-xs text-gray-500 mt-1">Shift Sore</div>
+                                                </td>
+                                            @endif
+                                            <td class="py-3 px-4">
+                                                <div class="font-medium text-gray-800">{{ $jadwal->user->name ?? ($jadwal->nama_dokter ?? 'Dokter') }}</div>
+                                                @if($jadwal->status === 'cuti')
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 whitespace-nowrap mt-1">
+                                                        Cuti
+                                                    </span>
+                                                @else
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 whitespace-nowrap mt-1">
+                                                        Aktif
+                                                    </span>
+                                                @endif
+                                            </td>
+                                            <td class="py-3 px-4 text-sm text-gray-600 font-medium">
+                                                {{ \Carbon\Carbon::parse($jadwal->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($jadwal->jam_selesai)->format('H:i') }} WIB
+                                            </td>
+                                            <td class="py-3 px-4 text-center">
+                                                @if($jadwal->status == 'aktif')
+                                                    <a href="{{ route('login') }}" class="inline-flex items-center px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-md shadow-sm transition-colors" title="Login untuk Booking">
+                                                        Booking
+                                                    </a>
+                                                @else
+                                                    <button disabled class="inline-flex items-center px-4 py-1.5 bg-red-100 text-red-700 text-sm font-semibold rounded-md cursor-not-allowed">Cuti / Penuh</button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </main>
 

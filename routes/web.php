@@ -23,7 +23,11 @@ Route::get('/', function () {
     header('Pragma: no-cache');
     header('Expires: Sat, 01 Jan 2000 00:00:00 GMT');
     
-    return view('welcome');
+    $jadwals = \App\Models\JadwalDokter::with('user')->orderBy('jam_mulai')->get();
+    $activeAnnouncements = \App\Models\Announcement::where('is_active', true)
+                            ->orderBy('tanggal_rilis', 'desc')
+                            ->get();
+    return view('welcome', compact('jadwals', 'activeAnnouncements'));
 });
 
 // Route::get('/dashboard', function () {
@@ -49,6 +53,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+    
+    Route::post('/admin/clinic-status', function (Illuminate\Http\Request $request) {
+        if (auth()->user()->role !== 'admin') {
+            abort(403);
+        }
+        
+        Cache::put('clinic_status', $request->status);
+        Cache::put('shift1_open', $request->shift1_open);
+        Cache::put('shift1_close', $request->shift1_close);
+        Cache::put('shift2_open', $request->shift2_open);
+        Cache::put('shift2_close', $request->shift2_close);
+        return back()->with('success', 'Status dan Jam operasional (2 Shift) berhasil diperbarui!');
+    })->name('admin.clinic.status.update');
 
     // Rute Dokter
     Route::get('/dokter/dashboard', [RekamMedisController::class, 'dashboard'])->name('dokter.dashboard');
@@ -61,17 +78,14 @@ Route::get('/pasien/dashboard', function() {
                             ->orderBy('tanggal_rilis', 'desc')
                             ->get();
 
-    // 2. Logika Status Klinik (Opsional, jika kamu sudah punya)
-    $clinicIsOpen = true; // Ganti dengan logic jadwalmu
-    $clinicOperationalMessage = "Klinik Sedang Buka";
-
-    // 3. Kirim data ke view
-    return view('pasien.dashboard', compact('activeAnnouncements', 'clinicIsOpen', 'clinicOperationalMessage'));
+    // 2. Kirim data ke view
+    return view('pasien.dashboard', compact('activeAnnouncements'));
 })->name('pasien.dashboard');
 
     // Rute CRUD Jadwal Dokter dan Obat
     Route::resource('jadwal', JadwalDokterController::class);
     Route::post('jadwal/sync-users', [JadwalDokterController::class, 'syncUsers'])->name('jadwal.syncUsers');
+    Route::post('jadwal/{id}/toggle-status', [JadwalDokterController::class, 'toggleStatus'])->name('jadwal.toggleStatus');
     Route::resource('obat', ObatController::class);
     Route::resource('announcements', AnnouncementController::class);
     // Reservasi: pasien melihat jadwal & booking

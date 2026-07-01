@@ -71,21 +71,17 @@
                                         <span class="px-2 py-1 rounded text-sm font-medium {{ $r->status == 'pending' ? 'bg-yellow-100 text-yellow-800' : ($r->status == 'dikonfirmasi' ? 'bg-emerald-100 text-emerald-800' : ($r->status == 'selesai' ? 'bg-indigo-100 text-indigo-800' : 'bg-red-100 text-red-800')) }}">{{ $r->status == 'pending' ? 'Menunggu' : ($r->status == 'dikonfirmasi' ? 'Disetujui' : ($r->status == 'selesai' ? 'Selesai' : 'Batal')) }}</span>
                                     </td>
                                     <td class="p-4">
-                                        <form action="{{ route('dokter.reservasi.updateStatus', $r->id) }}" method="POST" class="inline-block mr-2">
-                                            @csrf
-                                            <select name="status" class="border-gray-300 rounded-md mr-2">
-                                                <option value="pending" {{ $r->status=='pending' ? 'selected' : '' }}>Menunggu</option>
-                                                <option value="dikonfirmasi" {{ $r->status=='dikonfirmasi' ? 'selected' : '' }}>Setujui</option>
-                                                <option value="selesai" {{ $r->status=='selesai' ? 'selected' : '' }}>Selesai</option>
-                                                <option value="batal" {{ $r->status=='batal' ? 'selected' : '' }}>Tolak</option>
-                                            </select>
-                                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded">Simpan</button>
-                                        </form>
-                                        @if($r->status === 'dikonfirmasi')
-                                            <a href="{{ route('dokter.rekam.create', $r->id) }}" class="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-1 px-3 rounded text-sm animate-pulse">
-                                                Isi Rekam Medis
-                                            </a>
-                                        @endif
+                                        <div class="space-y-2">
+                                            @if($r->status === 'pending' || $r->status === 'dikonfirmasi')
+                                                <a href="{{ route('dokter.rekam.create', $r->id) }}" class="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors">
+                                                    Proses
+                                                </a>
+                                            @elseif($r->status === 'selesai')
+                                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 whitespace-nowrap">
+                                                    Selesai Diperiksa
+                                                </span>
+                                            @endif
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
