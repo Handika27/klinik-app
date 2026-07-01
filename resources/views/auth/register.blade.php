@@ -6,8 +6,10 @@
             <div class="absolute -bottom-32 -right-32 w-80 h-80 bg-indigo-700 rounded-full opacity-50"></div>
 
             <div class="relative z-10 flex-grow flex items-center justify-center">
-                <div class="w-80 h-80 bg-indigo-500 rounded-3xl shadow-2xl flex items-center justify-center border border-indigo-400">
-                    <span class="text-indigo-200">[Area Gambar Stetoskop 3D]</span>
+                <div class="w-full max-w-md flex items-center justify-center p-4">
+                    <img src="{{ asset('images/Medicine-pana.svg') }}" 
+                         alt="Ilustrasi Layanan Klinik Medika" 
+                         class="w-full h-auto object-contain drop-shadow-xl">
                 </div>
             </div>
 

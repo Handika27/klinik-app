@@ -13,10 +13,6 @@
                 <a href="{{ route('jadwal.create') }}" class="bg-green-600 hover:bg-green-800 text-white font-bold py-2 px-4 rounded shadow transition duration-150">
                     + Tambah Jadwal Baru
                 </a>
-                <form action="{{ route('jadwal.syncUsers') }}" method="POST" onsubmit="return confirm('Jalankan sinkronisasi jadwal dengan daftar dokter?');">
-                    @csrf
-                    <button type="submit" class="bg-yellow-600 hover:bg-yellow-800 text-white font-bold py-2 px-4 rounded shadow transition duration-150">Sinkronisasi Dokter</button>
-                </form>
             </div>
             @endif
             @if(session('success'))

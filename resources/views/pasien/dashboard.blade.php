@@ -25,7 +25,7 @@
             
             @if($activeAnnouncements->count() > 0)
                 <div class="space-y-4">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">📢 Pengumuman Terbaru</h3>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4"> Pengumuman Terbaru</h3>
                     @foreach($activeAnnouncements as $announcement)
                         <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-2xl shadow-lg overflow-hidden">
                             <div class="p-6">

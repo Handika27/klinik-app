@@ -84,7 +84,6 @@ Route::get('/pasien/dashboard', function() {
 
     // Rute CRUD Jadwal Dokter dan Obat
     Route::resource('jadwal', JadwalDokterController::class);
-    Route::post('jadwal/sync-users', [JadwalDokterController::class, 'syncUsers'])->name('jadwal.syncUsers');
     Route::post('jadwal/{id}/toggle-status', [JadwalDokterController::class, 'toggleStatus'])->name('jadwal.toggleStatus');
     Route::resource('obat', ObatController::class);
     Route::resource('announcements', AnnouncementController::class);

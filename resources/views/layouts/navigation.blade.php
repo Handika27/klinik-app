@@ -116,7 +116,7 @@
             @endif
             @if(auth()->user() && auth()->user()->role === 'dokter')
                 <x-responsive-nav-link :href="route('jadwal.index')" :active="request()->routeIs('jadwal.*')">
-                    {{ __('Kelola Jadwal') }}
+                    {{ __('Lihat Jadwal') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('dokter.reservasi.index')" :active="request()->routeIs('dokter.reservasi.*')">
                     {{ __('Kelola Reservasi') }}

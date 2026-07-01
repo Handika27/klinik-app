@@ -151,27 +151,7 @@ class JadwalDokterController extends Controller
         }
     }
 
-    // Sinkronisasi jadwal: hubungkan jadwal yang nama_dokter-nya match dengan akun user dokter
-    public function syncUsers()
-    {
-        try {
-            $updated = 0;
-            $jadwals = JadwalDokter::whereNull('user_id')->orWhere('user_id', 0)->get();
 
-            foreach ($jadwals as $jadwal) {
-                $user = User::where('role', 'dokter')->where('name', $jadwal->nama_dokter)->first();
-                if ($user) {
-                    $jadwal->user_id = $user->id;
-                    $jadwal->save();
-                    $updated++;
-                }
-            }
-
-            return redirect()->route('jadwal.index')->with('success', "Sinkronisasi selesai. Jumlah jadwal terhubung: $updated");
-        } catch (\Exception $e) {
-            return redirect()->route('jadwal.index')->with('error', 'Gagal melakukan sinkronisasi: ' . $e->getMessage());
-        }
-    }
     
     // Toggle status jadwal antara aktif dan cuti
     public function toggleStatus($id)

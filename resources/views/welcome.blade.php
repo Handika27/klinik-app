@@ -39,7 +39,7 @@
                                 Kembali ke Dashboard &rarr;
                             </a>
                         @else
-                            <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
+                            <a href="{{ route('login') }}" class="text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow transition">
                                 Log in
                             </a>
 
@@ -104,7 +104,7 @@
                             Kembali ke Dashboard &rarr;
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition">
+                        <a href="{{ route('login') }}" class="text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg shadow transition">
                             Log in
                         </a>
 
@@ -126,17 +126,14 @@
         <div class="flex flex-col-reverse md:flex-row items-center gap-12 py-8 mb-12">
             
             <div class="w-full md:w-1/2 flex flex-col items-center md:items-start text-center md:text-left">
-                <div class="inline-block bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full text-sm font-semibold mb-6">
-                    🚀 Platform Kesehatan Modern 2026
-                </div>
                 <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight text-slate-900 mb-6">
-                    Kelola Klinik Anda <br>
+                    Selamat Datang di Layanan Terpadu Klinik Medika! <br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-emerald-500">
                         Lebih Cerdas & Cepat.
                     </span>
                 </h1>
                 <p class="text-lg text-slate-600 mb-8 max-w-lg">
-                    Sistem informasi terpadu untuk mengatur jadwal dokter, rekam medis pasien, dan operasional fasilitas kesehatan Anda dalam satu pintu.
+                    Lihat jadwal operasional kami, pengumuman, dan update lainnya. Daftar mudah dengan reservasi online.
                 </p>
                 
                 <div class="flex gap-4">
@@ -150,15 +147,13 @@
             </div>
 
             <div class="w-full md:w-1/2 flex justify-center">
-                <div class="relative w-full max-w-md aspect-square bg-indigo-50 rounded-3xl border-2 border-dashed border-indigo-200 flex flex-col items-center justify-center p-8 text-center shadow-inner">
-                    <div class="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mb-4 text-3xl">
-                        🏥
-                    </div>
-                    <h3 class="text-indigo-800 font-bold text-xl mb-2">[Area Ilustrasi Klinik]</h3>
-                    <p class="text-indigo-600 text-sm">Tempatkan gambar vektor dokter atau render 3D bangunan klinik di sini.</p>
+                <div class="relative w-full max-w-md flex items-center justify-center p-4">
+                    <div class="absolute top-10 right-10 w-32 h-32 bg-emerald-400 rounded-full opacity-30 blur-3xl z-0"></div>
+                    <div class="absolute bottom-10 left-10 w-40 h-40 bg-indigo-600 rounded-full opacity-20 blur-3xl z-0"></div>
                     
-                    <div class="absolute -top-6 -right-6 w-24 h-24 bg-emerald-400 rounded-full opacity-20 blur-2xl"></div>
-                    <div class="absolute -bottom-8 -left-8 w-32 h-32 bg-indigo-600 rounded-full opacity-20 blur-2xl"></div>
+                    <img src="{{ asset('images/Medicine-pana.svg') }}" 
+                         alt="Ilustrasi Layanan Klinik Medika" 
+                         class="relative z-10 w-full h-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500">
                 </div>
             </div>
 
@@ -167,7 +162,7 @@
         <!-- Pengumuman -->
         @if($activeAnnouncements->count() > 0)
             <div class="space-y-4 mb-16">
-                <h2 class="text-2xl font-bold text-slate-800 mb-6">📢 Pengumuman Terbaru</h2>
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">Pengumuman Terbaru</h2>
                 @foreach($activeAnnouncements as $announcement)
                     <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-2xl shadow-lg overflow-hidden">
                         <div class="p-6">
@@ -193,7 +188,11 @@
 
         <!-- Jadwal Operasional Dokter -->
         <div id="jadwal-operasional" class="mb-16 pt-20">
-            <h2 class="text-2xl font-bold text-slate-800 mb-6">🗓️ Jadwal Operasional Dokter</h2>
+            <p class="text-lg text-slate-600 mb-8 max-w-lg">
+            
+            </p>
+            
+            <h2 class="text-2xl font-bold text-slate-800 mb-6">Jadwal Operasional Dokter</h2>
             <div class="overflow-x-auto bg-white rounded-lg shadow mb-8">
                 @php
                     $hari_list = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
