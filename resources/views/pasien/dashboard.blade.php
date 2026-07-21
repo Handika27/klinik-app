@@ -51,12 +51,9 @@
     <x-whatsapp-button />
 
     <script>
-        // Prevent accidental back button/swipe back only on this dashboard page
         (function() {
-            // Setup initial history state
             history.replaceState({ dashboard: true }, '', location.href);
             
-            // Always keep one extra state so back button triggers popstate
             history.pushState(null, '', location.href);
 
             window.addEventListener('pageshow', function(event) {
@@ -67,13 +64,11 @@
             });
 
             window.addEventListener('popstate', function(event) {
-                // Always show confirmation on back button
-                showLogoutModal(function(confirmed) {
+                   showLogoutModal(function(confirmed) {
                     if (confirmed) {
                         window.location.replace('/');
                     } else {
-                        // Push state again to prevent further back attempts
-                        history.pushState(null, '', location.href);
+                         history.pushState(null, '', location.href);
                     }
                 });
             });
