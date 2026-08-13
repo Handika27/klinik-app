@@ -6,11 +6,28 @@ A comprehensive, web-based clinic management system built with Laravel to stream
 
 ## 📸 Screenshots
 
-| Admin Dashboard | Login Page |
-|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/0bc366fa-54be-46e3-9e58-2e4c509d3945" width="100%"> | <img src="https://github.com/user-attachments/assets/c99205f4-e82f-494d-8478-a1011f9dd1fb" width="100%"> |
-| **Landing Page** | |
-| <img src="https://github.com/user-attachments/assets/eed5eee4-c2a7-4c3e-8577-3e3c163503de" width="100%"> | |
+<table>
+  <tr>
+    <th colspan="2">Landing Page</th>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <img src="https://github.com/user-attachments/assets/eed5eee4-c2a7-4c3e-8577-3e3c163503de" width="100%" alt="Landing Page">
+    </td>
+  </tr>
+  <tr>
+    <th width="50%">Admin Dashboard</th>
+    <th width="50%">Login Page</th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://github.com/user-attachments/assets/0bc366fa-54be-46e3-9e58-2e4c509d3945" width="100%" alt="Admin Dashboard">
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/c99205f4-e82f-494d-8478-a1011f9dd1fb" width="100%" alt="Login Page">
+    </td>
+  </tr>
+</table>
 
 
 
